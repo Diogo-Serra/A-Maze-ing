@@ -17,6 +17,7 @@ A-Maze-ing is a Python maze generator that procedurally creates fully connected,
 - pydantic
 - flake8
 - mypy
+- test
 
 ### Installation
 
