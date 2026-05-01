@@ -6,9 +6,9 @@ PY := python3
 ENV := -m venv .venv
 SRC_ENV := source .venv/bin/activate
 INSTALL_REQ := pip install -r requirements.txt
+LINT_STRICT := flake8 . --exclude=.venv && mypy . --strict
 CLEAN_ENV_CACHE := rm -rf .venv **/__pycache__ **/.mypy_cache
 BUILD := config.txt main.py Makefile README.md requirements.txt src/
-LINT_STRICT := flake8 . --exclude=.venv && mypy . --strict
 LINT := flake8 . --exclude=.venv && mypy . \
 		--warn-return-any \
 		--warn-unused-ignores \
