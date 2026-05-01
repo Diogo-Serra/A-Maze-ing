@@ -5,8 +5,8 @@ SHELL :=  $(shell echo $$SHELL)
 PY := python3
 ENV := -m venv .venv
 SRC_ENV := source .venv/bin/activate
-CLEAN_ENV := rm -rf .venv
 INSTALL_REQ := pip install -r requirements.txt
+CLEAN_ENV_CACHE := rm -rf .venv **/__pycache__ **/.mypy_cache
 BUILD := config.txt main.py Makefile README.md requirements.txt src/
 LINT_STRICT := flake8 . --exclude=.venv && mypy . --strict
 LINT := flake8 . --exclude=.venv && mypy . \
@@ -19,17 +19,17 @@ LINT := flake8 . --exclude=.venv && mypy . \
 install:
 	$(PY) $(ENV) && $(SRC_ENV) && $(INSTALL_REQ)
 
-run :
-	$(PY) main.py config.txt
-
 build:
 	tar -cf A-Maze-ing.tar $(BUILD)
 
-clean:
-	$(CLEAN_ENV)
+run :
+	$(PY) main.py config.txt
 
-lint:
-	$(LINT)
+clean:
+	$(CLEAN_ENV_CACHE)
 
 lint-strict:
 	$(LINT_STRICT)
+
+lint:
+	$(LINT)
