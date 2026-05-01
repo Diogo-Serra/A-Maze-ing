@@ -12,13 +12,9 @@ Raises:
 """
 
 
-try:
-    from sys import exit
-    from typing import Any
-    from string import punctuation, digits
-except ImportError as error:
-    print(error)
-    exit(1)
+from sys import exit
+from typing import Any
+from string import punctuation, digits
 
 
 def load_settings(argv: list[str]) -> dict:
