@@ -15,8 +15,14 @@ Raises:
 
 
 from typing import Any
+from .classes import Settings
 from string import punctuation, digits
-from .classes import Settings, ValidationError
+
+
+try:
+    from pydantic import ValidationError
+except ImportError as error:
+    print(error)
 
 
 def load_settings(argv: list[str]) -> Settings:
@@ -26,8 +32,7 @@ def load_settings(argv: list[str]) -> Settings:
 
         validated_argv: dict[str, str] = argv_parser(argv)
         setting_file: str = validated_argv['config']
-
-        settings: Settings = settings_parser(setting_file)
+        settings_class: Settings = settings_parser(setting_file)
 
     except ValueError as error:
         print(error)
@@ -41,7 +46,7 @@ def load_settings(argv: list[str]) -> Settings:
         print(error)
         exit(1)
 
-    return settings
+    return settings_class
 
 
 def argv_parser(argv: list[str]) -> dict[str, str]:

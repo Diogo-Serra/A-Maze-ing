@@ -9,16 +9,15 @@ Classes:
 
 """
 
-
+from __future__ import annotations
 from sys import exit
 
 try:
-    from pydantic import ( # noqa
+    from pydantic import (
         BaseModel,
         Field,
         field_validator,
-        model_validator,
-        ValidationError)
+        model_validator)
 except ImportError as error:
     print(error)
     exit(1)
@@ -31,6 +30,7 @@ class Settings(BaseModel):
     EXIT: tuple[int, int]
     OUTPUT_FILE: str
     PERFECT: bool
+    SEED: int | None = None
 
     @field_validator('ENTRY', 'EXIT', mode="before")
     @classmethod
@@ -41,16 +41,23 @@ class Settings(BaseModel):
 
     @field_validator('OUTPUT_FILE', mode="after")
     @classmethod
-    def validator_output_file(cls, name: str):
-        file_name = name.strip()
-        if not file_name.endswith('.txt'):
+    def validator_output_file(cls, name: str) -> str:
+        _name = name.removesuffix('.txt')
+        if not _name:
+            raise ValueError("Output file name cannot be empty")
+        if not _name[0].isalpha():
+            raise ValueError(f"Output file must start with a letter: '{name}'")
+        if not all(c.isalnum() or c in '_-' for c in _name):
+            raise ValueError(f"Invalid output file name: '{name}'\n"
+                             "Allowed: letters, numbers, _ and -")
+        if not name.endswith('.txt'):
             raise ValueError(f'Incorrect output_file: {name}:\n'
                              'valid example: maze.txt')
         else:
-            return file_name
+            return name
 
     @model_validator(mode='after')
-    def validator_maze(self):
+    def validator_maze(self) -> Settings:
         entry_x, entry_y = self.ENTRY
         exit_x, exit_y = self.EXIT
         if entry_x >= self.WIDTH or exit_x >= self.WIDTH:

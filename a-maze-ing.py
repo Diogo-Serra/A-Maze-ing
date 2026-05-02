@@ -10,13 +10,8 @@ Flow:
     3. On success, Maze class is instantiated
 """
 
-
-try:
-    from sys import argv
-    from src import load_settings, Settings
-except ImportError as error:
-    print(error)
-    exit(1)
+from sys import argv
+from src import load_settings, Settings
 
 
 def main() -> None:
