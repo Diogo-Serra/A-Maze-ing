@@ -1,7 +1,6 @@
 # A-Maze-ing Makefile
 SHELL :=  $(shell echo $$SHELL)
 
-
 PY := python3
 ENV := -m venv .venv
 SRC_ENV := source .venv/bin/activate
