@@ -87,17 +87,23 @@ We chose DFS because it is simple to implement, produces long winding corridors 
 
 | Member | Role |
 |---|---|
-| [Diogo Serra](https://github.com/Diogo-Serra) | Settings parser, input validation, testing
-| [Pedro Pinhão](https://github.com/Retr02k) | Core algorithm, graphical display, testing
+| [Diogo Serra](https://github.com/Diogo-Serra) | Settings parser, pathfinder
+| [Pedro Pinhão](https://github.com/Retr02k) | Core algorithm, graphics
 
 ### Planning
 
 Initial planned timeline:
 
-- Week 1: project setup and algorithm research
-- Week 2: settings parsing, game flow, and menus
-- Week 3: core maze generation
-- Week 4: graphical display and visualization
+Week 1:
+
+    Project setup, algorithm research
+    Settings parsing, game flow and menus
+
+Week 2:
+
+    Core maze generation
+    Graphical display and visualization
+
 
 ### What Worked Well & What Could Be Improved
 
@@ -130,7 +136,7 @@ Initial planned timeline:
 
 ### AI Usage
 
-AI tools were used for research support, concept clarification, and creating visual explanations to better understand maze generation logic.
+AI tools were used for research support, concept clarification, and visual explanations to better understand maze generation logic.
+AI was also used to support with markdown language on this README file.
 
-No code was generated with AI; implementation, decisions and code were written by us.
-
+No code was generated with AI; implementation, decisions and code were written by the team.

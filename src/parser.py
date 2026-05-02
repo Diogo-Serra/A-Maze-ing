@@ -35,12 +35,14 @@ def argv_parser(argv: list[str]) -> dict[str, str]:
         script: str = argv[0].strip(punctuation + digits + " ")
         config: str = argv[1].strip(punctuation + digits + " ")
         if not all(x in usage for x in [script, config]):
-            raise ValueError("Incorrect input\nUsage: "
-                  "python3 a-maze-ing.py config.txt")
+            raise ValueError("Incorrect input\n"
+                             f"Invalid arguments: '{script}' '{config}'\n"
+                             "Usage: python3 main.py config.txt")
         return {'script': script, 'config': config}
     else:
         raise ValueError("Incorrect input\n"
-                         "Usage: python3 a-maze-ing.py config.txt")
+                         f"Expected 2 arguments, got {len(argv)}\n"
+                         "Usage: python3 main.py config.txt")
 
 
 def settings_parser(file_name: str) -> dict[str, Any]:
