@@ -22,6 +22,7 @@ def main() -> None:
         settings: Settings = load_settings(argv)
         if settings:
             print("Success validating config.txt")
+            print("Starting now ...")
     else:
         print("Invalid argument count\nUsage: "
               "python3 main.py config.txt")

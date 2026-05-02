@@ -1,18 +1,19 @@
 """
 Parser Module
 =============
-Parses and validates [argv, config.txt].
+Parses and validates [argv, config.txt]
+Also handles "config.txt"
 
 Expects:
-    argv: list[str]
+    argv: list[str] | str
 
 Returns:
     Settings: validated settings from config.txt
 """
 
 from typing import Any
-from string import punctuation, digits
 from .classes import Settings
+from string import punctuation, digits
 try:
     from pydantic import ValidationError
 except ImportError as error:
