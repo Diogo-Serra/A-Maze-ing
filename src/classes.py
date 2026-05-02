@@ -40,6 +40,7 @@ class Settings(BaseModel):
         return (int(x.strip()), int(y.strip()))
 
     @field_validator('OUTPUT_FILE', mode="after")
+    @classmethod
     def validator_output_file(cls, name: str):
         file_name = name.strip()
         if not file_name.endswith('.txt'):
@@ -54,11 +55,9 @@ class Settings(BaseModel):
         exit_x, exit_y = self.EXIT
         if entry_x >= self.WIDTH or exit_x >= self.WIDTH:
             raise ValueError('Coordinates cannot exceed Width')
-        if entry_x < 0 or exit_x < 0:
-            raise ValueError('Coordinates cannot be negative')
         if entry_y >= self.HEIGHT or exit_y >= self.HEIGHT:
             raise ValueError('Coordinates cannot exceed Height')
-        if entry_y < 0 or exit_y < 0:
+        if any(c < 0 for c in (*self.ENTRY, *self.EXIT)):
             raise ValueError('Coordinates cannot be negative')
         if self.ENTRY == self.EXIT:
             raise ValueError('Entry and Exit cannot be the same cell')

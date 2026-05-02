@@ -14,28 +14,34 @@ Raises:
 """
 
 
-from sys import exit
-from .classes import Settings, ValidationError
+from typing import Any
 from string import punctuation, digits
+from .classes import Settings, ValidationError
 
 
-def load_settings(argv: list[str]) -> dict:
+def load_settings(argv: list[str]) -> Settings:
     """ Parsing and settings loader handler """
 
     try:
+
         validated_argv: dict[str, str] = argv_parser(argv)
         setting_file: str = validated_argv['config']
+
+        settings: Settings = settings_parser(setting_file)
+
     except ValueError as error:
         print(error)
         exit(1)
+    except ValidationError as error:
+        for _error in error.errors():
+            print(_error['loc'][0])
+            print(_error['msg'])
+            exit(1)
+    except Exception as error:
+        print(error)
+        exit(1)
 
-    try:
-        settings: Settings = settings_parser(setting_file)
-        print(settings)
-    except ValidationError as e:
-        for error in e.errors():
-            print(error['loc'])
-            print(error['msg'])
+    return settings
 
 
 def argv_parser(argv: list[str]) -> dict[str, str]:
@@ -59,37 +65,23 @@ def argv_parser(argv: list[str]) -> dict[str, str]:
 def settings_parser(file_name: str) -> Settings:
     """ Settings parser """
 
-    settings: dict[str, int | float | bool] = {}
+    parsed_settings: dict[str, Any] = {}
 
-    try:
-        with open(file_name, 'r') as config_file:
-            _settings: str = config_file.read().split('\n')
-    except (FileNotFoundError, FileExistsError) as error:
-        print(error)
-        exit(1)
+    with open(file_name, 'r') as config_file:
+        _settings: list[str] = config_file.read().split('\n')
 
-    try:
-        for line in _settings:
-            setting = line.strip()
-            if not setting or setting.startswith("#"):
-                continue
-            if "=" not in setting:
-                raise ValueError(f"{setting} missing '=' sign")
-            else:
-                key, value = setting.split('=', 1)
-                settings[key.upper()] = value.strip()
-        if not all(key.isidentifier() for key in settings.keys()):
-            raise ValueError("Invalid key format in config file")
-    except ValueError as error:
-        print(error)
-        exit(1)
+    for line in _settings:
+        setting: str = line.strip()
+        if not setting or setting.startswith("#"):
+            continue
+        if "=" not in setting:
+            raise ValueError(f"{setting} missing '=' sign")
+        else:
+            key, value = setting.split('=', 1)
+            parsed_settings[key.upper()] = value.strip()
 
-    try:
-        settings = Settings(**settings)
-    except ValidationError as error:
-        for error in error.errors():
-            print(error['loc'][0])
-            print(error['msg'])
-            exit(1)
+    if not all(key.isidentifier() for key in parsed_settings.keys()):
+        raise ValueError("Invalid key format in config file")
 
+    settings: Settings = Settings(**parsed_settings)
     return settings

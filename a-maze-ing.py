@@ -12,8 +12,8 @@ Flow:
 
 
 try:
-    from sys import argv, exit
-    from src import load_settings
+    from sys import argv
+    from src import load_settings, Settings
 except ImportError as error:
     print(error)
     exit(1)
@@ -23,7 +23,8 @@ def main() -> None:
 
     """ Main function - Maze Caller/Tester """
 
-    load_settings(argv)
+    settings: Settings = load_settings(argv)
+    print(settings)
 
 
 if __name__ == "__main__":
