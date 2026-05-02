@@ -12,7 +12,7 @@ Returns:
 """
 
 from typing import Any
-from .classes import Settings
+from .classes import Settings, Maze
 from string import punctuation, digits
 try:
     from pydantic import ValidationError
@@ -21,7 +21,7 @@ except ImportError as error:
     exit(1)
 
 
-def load_settings(source: list[str] | str) -> Settings:
+def load_settings(source: list[str] | str) -> tuple[Settings, Maze]:
     """ Parsing and settings loader handler """
 
     try:
@@ -30,8 +30,15 @@ def load_settings(source: list[str] | str) -> Settings:
             validated_argv: dict[str, str] = argv_parser(source)
             settings_file: str = validated_argv['config']
             settings: Settings = settings_parser(settings_file)
+            maze = Maze(settings)
+            maze.generate()
+            maze.save_maze()
+            print(maze)
+            return (settings, maze)
         elif isinstance(source, str):
             settings = settings_parser(source)
+            maze = Maze(settings)
+            return (settings, maze)
         else:
             raise ValueError(f"Invalid source type: {type(source)}")
 
@@ -55,8 +62,7 @@ def load_settings(source: list[str] | str) -> Settings:
     except Exception as error:
         print(f"Unexpected Error: {error}")
         exit(1)
-
-    return settings
+    return (settings, maze)
 
 
 def argv_parser(argv: list[str]) -> dict[str, str]:
