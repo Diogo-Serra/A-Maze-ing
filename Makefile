@@ -23,7 +23,7 @@ build:
 	tar -cf A-Maze-ing.tar $(BUILD)
 
 run :
-	$(PY) a-maze-ing.py config.txt
+	$(SRC_ENV) && $(PY) a-maze-ing.py config.txt
 
 clean:
 	$(CLEAN_ENV_CACHE)
