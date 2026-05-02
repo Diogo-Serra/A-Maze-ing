@@ -23,7 +23,8 @@ A-Maze-ing is a Python maze generator that procedurally creates fully connected,
 ```bash
 git clone git@github.com:Diogo-Serra/A-Maze-ing.git
 cd A-Maze-ing
-pip install -r requirements.txt
+make install
+make run
 ```
 
 ### Execution
@@ -35,7 +36,7 @@ python a-maze-ing.py [seed]
 
 Run with a settings file:
 ```bash
-python a-maze-ing.py settings.txt
+python a-maze-ing.py config.txt
 ```
 
 ---
@@ -51,6 +52,7 @@ ENTRY=tuple
 EXIT=tuple
 OUTPUT_FILE=maze.txt
 PERFECT=bool
+SEED=int
 ```
 
 All fields are required.
@@ -76,8 +78,11 @@ We chose DFS because it is simple to implement, produces long winding corridors 
 
 ## Reusable Components
 
-- **Maze generator module** (`maze.py`) - The core DFS logic is decoupled from the display layer and can be reused in any project that needs maze generation. The `Maze` class also validates input data and supports maze creation directly from a settings file.
-- **Settings parser** - The config reader can be reused in other projects that require strict file-based configuration and validation.
+- **Maze class** (`classes.py`) - General purpose maze class, takes validated data and handles generation and output.
+
+- **Settings class** (`classes.py`) - Pydantic-based validation model, easily adapted to validate any structured config data beyond mazes.
+
+- **Parser** (`parser.py`) - Handles config file reading, class instantiation and all error catching through a versatile entry point `load_settings()`.
 
 ---
 
