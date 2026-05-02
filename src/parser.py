@@ -13,16 +13,14 @@ Raises:
     SystemExit: if argv is invalid or config file not found
 """
 
-
 from typing import Any
-from .classes import Settings
 from string import punctuation, digits
-
-
+from .classes import Settings
 try:
     from pydantic import ValidationError
 except ImportError as error:
     print(error)
+    exit(1)
 
 
 def load_settings(argv: list[str]) -> Settings:

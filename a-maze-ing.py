@@ -11,15 +11,22 @@ Flow:
 """
 
 from sys import argv
-from src import load_settings, Settings
+from src import load_settings, Settings, Maze
 
 
 def main() -> None:
 
     """ Main function - Maze Caller/Tester """
 
+    print("\nValidating settings: ")
     settings: Settings = load_settings(argv)
-    print(settings)
+    if settings:
+        print("Success validating config.txt")
+    print()
+
+    print("Creating maze from config.txt settings:")
+    maze: Maze = Maze(settings)
+    print(maze)
 
 
 if __name__ == "__main__":

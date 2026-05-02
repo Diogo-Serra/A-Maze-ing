@@ -1,2 +1,4 @@
-from .parser import load_settings # noqa
-from .classes import Settings, ValidationError # noqa
+from .parser import load_settings
+from .classes import Settings, Maze
+
+__all__ = ['load_settings', 'Settings', 'Maze']

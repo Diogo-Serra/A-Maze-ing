@@ -8,7 +8,6 @@ Classes:
     Maze: maze generation and pathfinding logic
 
 """
-
 from __future__ import annotations
 from sys import exit
 
@@ -69,3 +68,19 @@ class Settings(BaseModel):
         if self.ENTRY == self.EXIT:
             raise ValueError('Entry and Exit cannot be the same cell')
         return self
+
+
+class Maze:
+    def __init__(self, settings: Settings) -> None:
+        self.settings = settings
+
+    def __str__(self) -> str:
+        return ("=== Maze Settings === \n"
+                f"\nWidth: {self.settings.WIDTH} "
+                f"Height: {self.settings.HEIGHT}\n"
+                f"Entry: {self.settings.ENTRY} Exit: {self.settings.EXIT}\n"
+                " ---- ---- ----"
+                f"\nOutput_file: {self.settings.OUTPUT_FILE}\n"
+                f"Is Perfect? {self.settings.PERFECT}\n"
+                f"Seed: "
+                f"{self.settings.SEED if self.settings.SEED else "None"}\n")
