@@ -11,7 +11,7 @@ Flow:
 """
 
 from sys import argv
-from src import load_settings, Settings, Maze
+from src import load_settings, Settings, run
 
 
 def main() -> None:
@@ -24,9 +24,8 @@ def main() -> None:
         print("Success validating config.txt")
     print()
 
-    print("Creating maze from config.txt settings:")
-    maze: Maze = Maze(settings)
-    print(maze)
+    print("Starting now ...")
+    run(settings)
 
 
 if __name__ == "__main__":

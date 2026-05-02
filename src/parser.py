@@ -8,9 +8,6 @@ Expects:
 
 Returns:
     Settings: validated settings from config.txt
-
-Raises:
-    SystemExit: if argv is invalid or config file not found
 """
 
 from typing import Any
@@ -32,14 +29,14 @@ def load_settings(argv: list[str]) -> Settings:
         setting_file: str = validated_argv['config']
         settings_class: Settings = settings_parser(setting_file)
 
-    except ValueError as error:
-        print(error)
-        exit(1)
     except ValidationError as error:
         for _error in error.errors():
             print(_error['loc'][0])
             print(_error['msg'])
             exit(1)
+    except ValueError as error:
+        print(error)
+        exit(1)
     except Exception as error:
         print(error)
         exit(1)

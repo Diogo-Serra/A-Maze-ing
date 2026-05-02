@@ -75,7 +75,7 @@ class Maze:
         self.settings = settings
 
     def __str__(self) -> str:
-        return ("=== Maze Settings === \n"
+        return ("\n=== Maze Settings === \n"
                 f"\nWidth: {self.settings.WIDTH} "
                 f"Height: {self.settings.HEIGHT}\n"
                 f"Entry: {self.settings.ENTRY} Exit: {self.settings.EXIT}\n"
