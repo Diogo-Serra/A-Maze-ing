@@ -32,6 +32,13 @@ class Settings(BaseModel):
     OUTPUT_FILE: str
     PERFECT: bool
 
+    @field_validator('ENTRY', 'EXIT', mode="before")
+    @classmethod
+    def parse_tuple(cls, value: str) -> tuple[int, int]:
+        clean = value.strip("() ")
+        x, y = clean.split(",")
+        return (int(x.strip()), int(y.strip()))
+
     @field_validator('OUTPUT_FILE', mode="after")
     def validator_output_file(cls, name: str):
         file_name = name.strip()

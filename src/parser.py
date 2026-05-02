@@ -15,8 +15,8 @@ Raises:
 
 
 from sys import exit
-from string import punctuation, digits
 from .classes import Settings, ValidationError
+from string import punctuation, digits
 
 
 def load_settings(argv: list[str]) -> dict:
@@ -68,25 +68,21 @@ def settings_parser(file_name: str) -> Settings:
         print(error)
         exit(1)
 
-    for line in _settings:
-        setting = line.strip()
-        if "=" not in setting:
-            raise ValueError(f"{setting} missing '=' sign")
-        else:
-            key, value = setting.split('=')
-            settings[key] = value
-
     try:
+        for line in _settings:
+            setting = line.strip()
+            if not setting or setting.startswith("#"):
+                continue
+            if "=" not in setting:
+                raise ValueError(f"{setting} missing '=' sign")
+            else:
+                key, value = setting.split('=', 1)
+                settings[key.upper()] = value.strip()
         if not all(key.isidentifier() for key in settings.keys()):
-            raise ValueError("Only alphabetic keys in config file")
-        for key in settings.keys():
-            key.upper()
+            raise ValueError("Invalid key format in config file")
     except ValueError as error:
         print(error)
         exit(1)
-
-    x, y = settings['ENTRY'].split(",")
-    print(y)
 
     try:
         settings = Settings(**settings)
