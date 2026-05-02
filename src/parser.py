@@ -20,28 +20,42 @@ except ImportError as error:
     exit(1)
 
 
-def load_settings(argv: list[str]) -> Settings:
+def load_settings(source: list[str] | str) -> Settings:
     """ Parsing and settings loader handler """
 
     try:
 
-        validated_argv: dict[str, str] = argv_parser(argv)
-        setting_file: str = validated_argv['config']
-        settings_class: Settings = settings_parser(setting_file)
+        if isinstance(source, list):
+            validated_argv: dict[str, str] = argv_parser(source)
+            settings_file: str = validated_argv['config']
+            settings: Settings = settings_parser(settings_file)
+        elif isinstance(source, str):
+            settings = settings_parser(source)
+        else:
+            raise ValueError(f"Invalid source type: {type(source)}")
 
     except ValidationError as error:
         for _error in error.errors():
-            print(_error['loc'][0])
-            print(_error['msg'])
+            if _error['loc']:
+                print(f"Error location: {_error['loc'][0]} (config.txt)")
+            print(f"Error message: {_error['msg']}")
             exit(1)
+    except (
+        FileNotFoundError,
+        FileExistsError,
+        OSError,
+        PermissionError
+    ) as error:
+        print(f"File error: {error}")
+        exit(1)
     except ValueError as error:
-        print(error)
+        print(f"Error message: {error}")
         exit(1)
     except Exception as error:
-        print(error)
+        print(f"Unexpected Error: {error}")
         exit(1)
 
-    return settings_class
+    return settings
 
 
 def argv_parser(argv: list[str]) -> dict[str, str]:

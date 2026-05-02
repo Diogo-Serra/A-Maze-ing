@@ -17,14 +17,16 @@ from src import load_settings, Settings, run
 def main() -> None:
 
     """ Main function - Maze Caller/Tester """
-
-    print("\nValidating settings: ")
-    settings: Settings = load_settings(argv)
-    if settings:
-        print("Success validating config.txt")
+    if len(argv) == 2:
+        print("\nValidating settings: ")
+        settings: Settings = load_settings(argv)
+        if settings:
+            print("Success validating config.txt")
+    else:
+        print("Invalid argument count\nUsage: "
+              "python3 main.py config.txt")
     print()
 
-    print("Starting now ...")
     run(settings)
 
 
