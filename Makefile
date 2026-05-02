@@ -7,8 +7,8 @@ ENV := -m venv .venv
 SRC_ENV := source .venv/bin/activate
 INSTALL_REQ := pip install -r requirements.txt
 LINT_STRICT := flake8 . --exclude=.venv && mypy . --strict
-CLEAN_ENV_CACHE := rm -rf .venv **/__pycache__ **/.mypy_cache
 BUILD := config.txt main.py Makefile README.md requirements.txt src/
+CLEAN_ENV_CACHE := rm -rf .venv $$(find . -name __pycache__ -o -name .mypy_cache)
 LINT := flake8 . --exclude=.venv && mypy . \
 		--warn-return-any \
 		--warn-unused-ignores \
@@ -19,17 +19,17 @@ LINT := flake8 . --exclude=.venv && mypy . \
 install:
 	$(PY) $(ENV) && $(SRC_ENV) && $(INSTALL_REQ)
 
-build:
-	tar -cf A-Maze-ing.tar $(BUILD)
-
 run :
 	$(SRC_ENV) && $(PY) a-maze-ing.py config.txt
 
-clean:
-	$(CLEAN_ENV_CACHE)
+build:
+	tar -cf A-Maze-ing.tar $(BUILD)
 
 lint-strict:
-	$(LINT_STRICT)
+	$(SRC_ENV) $(LINT_STRICT)
 
 lint:
-	$(LINT)
+	$(SRC_ENV) $(LINT)
+
+clean:
+	$(CLEAN_ENV_CACHE)
