@@ -4,7 +4,7 @@
 
 ## Description
 
-A-Maze-ing is a Python maze generator that procedurally creates fully connected, solvable mazes using a Depth-First Search (DFS) algorithm. The program supports graphical display, step-through visualization, seed-based reproducibility, and configuration via a settings file.
+A-Maze-ing is a Python maze generator project for 42 Core curriculum that procedurally creates fully connected, solvable mazes using a Depth-First Search (DFS) algorithm. The program supports graphical display, step-through visualization, seed-based reproducibility, and configuration via a settings file.
 
 ---
 
@@ -72,7 +72,7 @@ This guarantees a fully connected, solvable maze with exactly one path between a
 
 ### Why DFS?
 
-We chose DFS because it is simple to implement, produces long winding corridors (visually interesting and challenging), and guarantees a perfect maze (no loops and no isolated regions). Its recursive nature also maps naturally to Python. This algorithm can still be revisited and changed.
+The team decided on DFS because it is simple to implement, produces long winding corridors (visually interesting and challenging), and guarantees a perfect maze (no loops and no isolated regions). Its recursive nature also maps naturally to Python. This algorithm can still be revisited and changed.
 
 ---
 
@@ -102,11 +102,11 @@ Initial planned timeline:
 Week 1:
 
     Project setup, algorithm research
-    Settings parsing, game flow and menus
+    Settings parsing, maze flow and menus
 
 Week 2:
 
-    Core maze generation
+    Core maze generation & Pathfinder
     Graphical display and visualization
 
 
