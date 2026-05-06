@@ -11,7 +11,7 @@ Flow:
 """
 
 from sys import argv
-from src import load_settings, run
+from src import load_settings
 
 
 def main() -> None:
@@ -20,7 +20,6 @@ def main() -> None:
     if len(argv) == 2:
         print("\nValidating settings: \n")
         settings, maze = load_settings(argv)
-        run(settings, maze)
         if settings:
             print("\nSuccess validating config.txt")
             print("Starting now ...")

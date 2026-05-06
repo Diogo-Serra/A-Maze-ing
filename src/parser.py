@@ -27,6 +27,7 @@ def load_settings(source: list[str] | str) -> tuple[Settings, Maze]:
     try:
 
         if isinstance(source, list):
+            from .app import run
             validated_argv: dict[str, str] = argv_parser(source)
             settings_file: str = validated_argv['config']
             settings: Settings = settings_parser(settings_file)
@@ -34,6 +35,7 @@ def load_settings(source: list[str] | str) -> tuple[Settings, Maze]:
             maze.generate()
             maze.save_maze()
             print(maze)
+            run(settings, maze)
             return (settings, maze)
         elif isinstance(source, str):
             settings = settings_parser(source)
@@ -52,7 +54,8 @@ def load_settings(source: list[str] | str) -> tuple[Settings, Maze]:
         FileNotFoundError,
         FileExistsError,
         OSError,
-        PermissionError
+        PermissionError,
+        EOFError
     ) as error:
         print(f"File error: {error}")
         exit(1)
