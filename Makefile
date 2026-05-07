@@ -10,7 +10,6 @@ LINT_STRICT := flake8 . --exclude=.venv && mypy . --strict
 PIP_UPDATE := .venv/bin/python3 -m pip install --upgrade pip
 BUILD := config.txt main.py Makefile README.md requirements.txt src/
 CLEAN_ENV_CACHE := rm -rf .venv $$(find . -name __pycache__ -o -name .mypy_cache)
-
 LINT := flake8 . --exclude=.venv && mypy . \
 		--warn-return-any \
 		--warn-unused-ignores \
