@@ -6,7 +6,6 @@ Application controller and user interface.
 Func:
     App: maze creation and user interaction
 """
-from sys import exit
 from os import system, name
 from .parser import load_settings
 from .classes import Settings, Maze

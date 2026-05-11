@@ -72,12 +72,12 @@ class Settings(BaseModel):
 
     def show_settings(self) -> None:
         print("\n=== Settings === \n"
-             f"\nWidth: {self.WIDTH}\n"
-             f"Height: {self.HEIGHT}\n"
-             f"Entry: {self.ENTRY}\nExit: {self.EXIT}\n"
-             f"\nOutput_file: {self.OUTPUT_FILE}\n"
-             f"Perfect: {self.PERFECT}\n"
-             f"Seed: {self.SEED}\n")
+              f"\nWidth: {self.WIDTH}\n"
+              f"Height: {self.HEIGHT}\n"
+              f"Entry: {self.ENTRY}\nExit: {self.EXIT}\n"
+              f"\nOutput_file: {self.OUTPUT_FILE}\n"
+              f"Perfect: {self.PERFECT}\n"
+              f"Seed: {self.SEED}\n")
 
 
 class Maze:
