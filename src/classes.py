@@ -171,17 +171,17 @@ class Maze:
 
 
 class Visualizer:
-    def __init__(self, _map: Maze):
-        self._map = _map
+    def __init__(self, maze: Maze):
+        self.maze = maze
 
-    def render_map(self) -> None:
-        if self._map.grid is None:
+    def rendermaze(self) -> None:
+        if self.maze.grid is None:
             return
 
         NORTH = 0x1
         WEST = 0x8
 
-        grid = self._map.grid
+        grid = self.maze.grid
         height = len(grid)
         width = len(grid[0]) if height > 0 else 0
 
