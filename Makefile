@@ -39,5 +39,5 @@ lint-strict:
 	$(MYPY) . --strict
 
 clean:
-	#echo Cleaning all
+	#echo Cleaning all cache
 	$(CLEAN_ENV) $$(find . -name __pycache__ -o -name .mypy_cache)
