@@ -56,7 +56,7 @@ def run(settings: Settings, maze: Maze) -> None:
             case "4":
                 clear_screen()
                 visualizer = Visualizer(maze)
-                visualizer.render_map()
+                visualizer.render_maze()
                 wait_input()
             case "0":
                 print("Exiting now. Closing program.")

@@ -174,7 +174,7 @@ class Visualizer:
     def __init__(self, maze: Maze):
         self.maze = maze
 
-    def rendermaze(self) -> None:
+    def render_maze(self) -> None:
         if self.maze.grid is None:
             return
 
