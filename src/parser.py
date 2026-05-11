@@ -34,7 +34,7 @@ def load_settings(source: list[str] | str) -> tuple[Settings, Maze]:
             maze = Maze(settings)
             maze.generate()
             maze.save_maze()
-            print(maze)
+            maze.show_maze()
             run(settings, maze)
             return (settings, maze)
         elif isinstance(source, str):
@@ -57,11 +57,11 @@ def load_settings(source: list[str] | str) -> tuple[Settings, Maze]:
     ) as file_error:
         print(f"File error: {file_error}")
         exit(1)
-    except ValueError as error:
-        print(f"Error message: {error}")
+    except ValueError as value_error:
+        print(f"Error message: {value_error}")
         exit(1)
-    except (Exception, BaseException) as error:
-        print(f"Unexpected Error: {error}")
+    except (Exception, BaseException) as exceptional_error:
+        print(f"Unexpected Error: {exceptional_error}")
         exit(1)
     return (settings, maze)
 
