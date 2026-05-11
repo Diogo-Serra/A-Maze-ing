@@ -53,16 +53,14 @@ def load_settings(source: list[str] | str) -> tuple[Settings, Maze]:
     except (
         FileNotFoundError,
         FileExistsError,
-        OSError,
         PermissionError,
-        EOFError
-    ) as error:
-        print(f"File error: {error}")
+    ) as file_error:
+        print(f"File error: {file_error}")
         exit(1)
     except ValueError as error:
         print(f"Error message: {error}")
         exit(1)
-    except Exception as error:
+    except (Exception, BaseException) as error:
         print(f"Unexpected Error: {error}")
         exit(1)
     return (settings, maze)
