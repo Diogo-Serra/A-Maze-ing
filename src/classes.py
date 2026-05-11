@@ -6,6 +6,7 @@ Contains the core data models.
 Classes:
     Settings: validates and stores maze configuration
     Maze: maze generation and pathfinding logic
+    Visualizer: class to handle visualizer building
 
 """
 from __future__ import annotations
@@ -167,3 +168,45 @@ class Maze:
                 dx, dy = DIRECTIONS[direction]
                 self.grid[y][x] &= ~direction
                 self.grid[y+dy][x+dx] &= ~OPPOSITE[direction]
+
+
+class Visualizer:
+    def __init__(self, _map: Maze):
+        self._map = _map
+
+    def render_map(self) -> None:
+        if self._map.grid is None:
+            return
+
+        NORTH = 0x1
+        EAST = 0x2
+        SOUTH = 0x4
+        WEST = 0x8
+
+        grid = self._map.grid
+        height = len(grid)
+        width = len(grid[0]) if height > 0 else 0
+
+        output = []
+
+        for y in range(height):
+            # Top wall row
+            top = ""
+            for x in range(width):
+                cell = grid[y][x]
+                top += "+" + ("---" if (cell & NORTH) else "   ")
+            output.append(top + "+")
+
+            # Cell row with left walls
+            mid = ""
+            for x in range(width):
+                cell = grid[y][x]
+                mid += ("|" if (cell & WEST) else " ") + "   "
+            output.append(mid + "|")
+
+        # Bottom border
+        output.append("+" + "---+" * width)
+
+        print()
+        print('\n'.join(output))
+        print()

@@ -8,7 +8,7 @@ Func:
 """
 from os import system, name
 from .parser import load_settings
-from .classes import Settings, Maze
+from .classes import Settings, Maze, Visualizer
 
 
 def clear_screen() -> None:
@@ -29,7 +29,7 @@ def run(settings: Settings, maze: Maze) -> None:
             1. Show settings
             2. Read new settings
             3. Generate a Maze grid
-            4. TODO: Visualizer active maze (Maze method)
+            4. Visualizer for active maze
             0. Exit
             """)
 
@@ -52,6 +52,11 @@ def run(settings: Settings, maze: Maze) -> None:
                 clear_screen()
                 maze.generate()
                 maze.show_maze()
+                wait_input()
+            case "4":
+                clear_screen()
+                visualizer = Visualizer(maze)
+                visualizer.render_map()
                 wait_input()
             case "0":
                 print("Exiting now. Closing program.")
