@@ -28,6 +28,10 @@ build:
 	@echo Building ...
 	tar -cf A-Maze-ing.tar $(BUILD)
 
+debug:
+	@echo Debugging ...
+	$(ENV_PY) -m pdb a-maze-ing.py config.txt
+
 lint:
 	@echo Testing lint
 	$(FLAKE8) . --exclude=.venv
@@ -39,5 +43,5 @@ lint-strict:
 	$(MYPY) . --strict
 
 clean:
-	#echo Cleaning all cache
+	#echo Cleaning all cache and venv
 	$(CLEAN_ENV) $$(find . -name __pycache__ -o -name .mypy_cache)
