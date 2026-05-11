@@ -9,13 +9,11 @@ Flow:
     2. Validate data with pydantic
     3. On success, Maze class is instantiated
 """
-
 from sys import argv
 from src import load_settings
 
 
 def main() -> None:
-
     """ Main function - Maze Caller/Tester """
     if len(argv) == 2:
         print("\nValidating settings: \n")
