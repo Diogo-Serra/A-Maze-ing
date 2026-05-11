@@ -2,43 +2,42 @@
 SHELL :=  $(shell echo $$SHELL)
 
 PY := python3
-ENV := -m venv .venv
+
 PIP := .venv/bin/pip
-SRC_ENV := source .venv/bin/activate
-INSTALL_REQ := $(PIP) install -r requirements.txt
-LINT_STRICT := flake8 . --exclude=.venv && mypy . --strict
-PIP_UPDATE := .venv/bin/python3 -m pip install --upgrade pip
-BUILD := config.txt main.py Makefile README.md requirements.txt src/
-CLEAN_ENV_CACHE := rm -rf .venv $$(find . -name __pycache__ -o -name .mypy_cache)
-LINT := flake8 . --exclude=.venv && mypy . \
-		--warn-return-any \
-		--warn-unused-ignores \
-		--ignore-missing-imports \
-		--disallow-untyped-defs \
-		--check-untyped-defs
+MYPY := .venv/bin/mypy
+CLEAN_ENV := rm -rf .venv
+FLAKE8 := .venv/bin/flake8
+ENV_PY := .venv/bin/python3
+BUILD := tar -cf A-Maze-ing.tar $(SRC)
+SRC := config.txt main.py Makefile README.md requirements.txt src/
+FLAGS_MYPY := --ignore-missing-imports --disallow-untyped-defs \
+			  --warn-return-any --warn-unused-ignores \
+		  	  --check-untyped-defs
 
 install:
-	@echo Installing requirements...
-	$(PY) $(ENV)
-	$(PIP_UPDATE)
-	$(INSTALL_REQ)
+	@echo Preparing environment and installing requirements...
+	$(PY) -m venv .venv
+	$(ENV_PY) -m pip install --upgrade pip
+	$(PIP) install -r requirements.txt
 
 run :
 	@echo Starting ...
-	.venv/bin/python3 a-maze-ing.py config.txt
+	$(ENV_PY) a-maze-ing.py config.txt
 
 build:
 	@echo Building ...
 	tar -cf A-Maze-ing.tar $(BUILD)
 
-lint-strict:
-	@echo Testing with lint-strict
-	$(SRC_ENV) $(LINT_STRICT)
-
 lint:
-	@echo Testing linting
-	$(SRC_ENV) $(LINT)
+	@echo Testing lint
+	$(FLAKE8) . --exclude=.venv
+	$(MYPY) . $(FLAGS_MYPY)
+
+lint-strict:
+	@echo Testing lint-strict
+	$(FLAKE8) . --exclude=.venv
+	$(MYPY) . --strict
 
 clean:
 	#echo Cleaning all
-	$(CLEAN_ENV_CACHE)
+	$(CLEAN_ENV) $$(find . -name __pycache__ -o -name .mypy_cache)
