@@ -18,11 +18,8 @@ def main() -> None:
 
     """ Main function - Maze Caller/Tester """
     if len(argv) == 2:
-        print("\nValidating settings: \n")
+        print("\nValidating settings and starting Maze generator:")
         settings, maze = load_settings(argv)
-        if settings:
-            print("\nSuccess validating config.txt")
-            print("Starting now ...")
     else:
         print("Invalid argument count\nUsage: "
               "python3 main.py config.txt")

@@ -70,14 +70,14 @@ class Settings(BaseModel):
             raise ValueError('Entry and Exit cannot be the same cell')
         return self
 
-    def __str__(self) -> str:
-        return ("\n=== Settings === \n"
-                f"\nWidth: {self.WIDTH}\n"
-                f"Height: {self.HEIGHT}\n"
-                f"Entry: {self.ENTRY}\nExit: {self.EXIT}\n"
-                f"\nOutput_file: {self.OUTPUT_FILE}\n"
-                f"Perfect: {self.PERFECT}\n"
-                f"Seed: {self.SEED}\n")
+    def show_settings(self) -> None:
+        print("\n=== Settings === \n"
+             f"\nWidth: {self.WIDTH}\n"
+             f"Height: {self.HEIGHT}\n"
+             f"Entry: {self.ENTRY}\nExit: {self.EXIT}\n"
+             f"\nOutput_file: {self.OUTPUT_FILE}\n"
+             f"Perfect: {self.PERFECT}\n"
+             f"Seed: {self.SEED}\n")
 
 
 class Maze:
@@ -92,18 +92,20 @@ class Maze:
         self.SEED: int | None = settings.SEED
         self.grid: list[list[int]] | None = None
 
-    def __str__(self) -> str:
+    def show_maze(self) -> None:
         if self.grid is None:
-            return "Maze not generated yet"
+            raise ValueError("Generate a maze first")
         grid: list[list[int]] = self.grid
-        return '\n'.join(
-            ''.join(format(cell, 'X') for cell in row)
-            for row in grid
+        print("Generated maze:\n")
+        print('\n'.join(
+             ''.join(format(cell, 'X') for cell in row)
+             for row in grid)
         )
+        print()
 
     def save_maze(self) -> None:
         if self.grid is None:
-            raise ValueError("Maze not generated yet")
+            raise ValueError("Generate a maze first")
         with open(self.settings.OUTPUT_FILE, 'w') as f:
             for row in self.grid:
                 f.write(''.join(format(cell, 'X') for cell in row) + '\n')
