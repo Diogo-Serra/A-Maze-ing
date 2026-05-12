@@ -43,5 +43,7 @@ lint-strict:
 	$(MYPY) . --strict
 
 clean:
-	#echo Cleaning all cache and venv
+	@echo Cleaning all cache and venv
 	$(CLEAN_ENV) $$(find . -name __pycache__ -o -name .mypy_cache)
+
+re: clean install
