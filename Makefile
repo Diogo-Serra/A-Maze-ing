@@ -15,7 +15,7 @@ FLAGS_MYPY := --ignore-missing-imports --disallow-untyped-defs \
 
 install:
 	@echo Preparing environment and installing requirements...
-	$(PY) -m venv $(VENV)
+	$(PY) -m venv .venv
 	$(ENV_PY) -m pip install --upgrade pip
 	$(PIP) install -r requirements.txt
 
