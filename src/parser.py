@@ -5,7 +5,7 @@ Parses and validates [argv, config.txt]
 Also handles "config.txt"
 
 Expects:
-    argv: list[str] | str
+    argv: list[str] | file_name: str
 
 Returns:
     Settings: validated settings from config.txt
@@ -73,15 +73,15 @@ def argv_parser(argv: list[str]) -> dict[str, str]:
     if len(argv) == 2:
         script: str = argv[0].strip(punctuation + digits + " ")
         config: str = argv[1].strip(punctuation + digits + " ")
-        if not all(x in usage for x in [script, config]):
+        if not all(arg in usage for arg in [script, config]):
             raise ValueError("Incorrect input\n"
                              f"Invalid arguments: '{script}' '{config}'\n"
-                             "Usage: python3 main.py config.txt")
+                             "Usage: python3 a-maze-ing.py config.txt")
         return {'script': script, 'config': config}
     else:
         raise ValueError("Incorrect input\n"
                          f"Expected 2 arguments, got {len(argv)}\n"
-                         "Usage: python3 main.py config.txt")
+                         "Usage: python3 a-maze-ing.py config.txt")
 
 
 def settings_parser(file_name: str) -> Settings:

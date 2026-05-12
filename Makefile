@@ -1,15 +1,14 @@
 # A-Maze-ing Makefile
-SHELL :=  $(shell echo $$SHELL)
+ENV := .venv/bin
+PY := /usr/bin/python3
 
-PY := python3
-
-PIP := .venv/bin/pip
-MYPY := .venv/bin/mypy
+PIP := $(ENV)/pip
+MYPY := $(ENV)/mypy
+FLAKE8 := $(ENV)/flake8
+ENV_PY := $(ENV)/python3
 CLEAN_ENV := rm -rf .venv
-FLAKE8 := .venv/bin/flake8
-ENV_PY := .venv/bin/python3
-BUILD := tar -cf A-Maze-ing.tar $(SRC)
-SRC := config.txt main.py Makefile README.md requirements.txt src/
+
+SRC := config.txt a-maze-ing.py Makefile README.md requirements.txt src/
 FLAGS_MYPY := --ignore-missing-imports --disallow-untyped-defs \
 			  --warn-return-any --warn-unused-ignores \
 		  	  --check-untyped-defs
@@ -26,19 +25,19 @@ run :
 
 build:
 	@echo Building ...
-	tar -cf A-Maze-ing.tar $(BUILD)
+	tar -cf A-Maze-ing.tar.gz $(SRC)
 
 debug:
 	@echo Debugging ...
 	$(ENV_PY) -m pdb a-maze-ing.py config.txt
 
 lint:
-	@echo Testing lint
+	@echo Testing lint ...
 	$(FLAKE8) . --exclude=.venv
 	$(MYPY) . $(FLAGS_MYPY)
 
 lint-strict:
-	@echo Testing lint-strict
+	@echo Testing lint-strict ...
 	$(FLAKE8) . --exclude=.venv
 	$(MYPY) . --strict
 

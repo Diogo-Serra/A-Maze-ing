@@ -1,5 +1,3 @@
-#!.venv/bin/python3.13
-
 """
 Entry point for the A-Maze-ing project
 
@@ -10,6 +8,7 @@ Flow:
     1. Parse settings from config.txt -> dict
     2. Validate data with pydantic
     3. On success, Maze class is instantiated
+    4. Visualizer class instatiated with a maze object
 """
 
 from sys import argv
