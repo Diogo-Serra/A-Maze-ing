@@ -92,6 +92,7 @@ class Maze:
         self.PERFECT: bool = settings.PERFECT
         self.SEED: int | None = settings.SEED
         self.grid: list[list[int]] | None = None
+        self.fixed: set[tuple[int, int]] = set()
 
     def show_maze(self) -> None:
         if self.grid is None:
@@ -149,22 +150,22 @@ class Maze:
         PATTERN_H = 5
 
         # Fixed cells if the maze is large enough (min 9x7)
-        fixed: set[tuple[int, int]] = set()
+        self.fixed = set()
         if self.WIDTH >= PATTERN_W + 2 and self.HEIGHT >= PATTERN_H + 2:
             start_x = (self.WIDTH - PATTERN_W) // 2
             start_y = (self.HEIGHT - PATTERN_H) // 2
             for row in range(PATTERN_H):
                 for col in range(3):
                     if FOUR[row][col]:
-                        fixed.add((start_x + col, start_y + row))
+                        self.fixed.add((start_x + col, start_y + row))
                     if TWO[row][col]:
-                        fixed.add((start_x + 4 + col, start_y + row))
+                        self.fixed.add((start_x + 4 + col, start_y + row))
             # Entry/Exit must not overlap with the 42 pattern
             for label, coord in (("Entry", self.ENTRY), ("Exit", self.EXIT)):
-                if coord in fixed:
+                if coord in self.fixed:
                     print(f"Warning: {label} {coord} overlaps with "
                           "the '42' pattern. Generating maze without '42'.")
-                    fixed.clear()
+                    self.fixed.clear()
                     break
 
         # 1. Start: Fill grid with 0xF
@@ -172,7 +173,7 @@ class Maze:
             [0xF] * self.WIDTH for _ in range(self.HEIGHT)]
 
         # 2. DFS — fixed cells are pre-visited so DFS never carves them
-        visited: set[tuple[int, int]] = set(fixed)
+        visited: set[tuple[int, int]] = set(self.fixed)
         stack: list[tuple[int, int]] = [self.ENTRY]
         visited.add(self.ENTRY)
 
@@ -203,14 +204,15 @@ class Maze:
                 direction = rng.choice([EAST, SOUTH])
                 dx, dy = DIRECTIONS[direction]
                 nx, ny = x + dx, y + dy
-                if (x, y) not in fixed and (nx, ny) not in fixed:
+                if (x, y) not in self.fixed and (nx, ny) not in self.fixed:
                     self.grid[y][x] &= ~direction
                     self.grid[ny][nx] &= ~OPPOSITE[direction]
 
 
 class Visualizer:
-    def __init__(self, maze: Maze):
+    def __init__(self, maze: Maze, color: str = "white"):
         self.maze = maze
+        self.color = color
 
     def render_maze(self) -> None:
         if self.maze.grid is None:
@@ -219,29 +221,39 @@ class Visualizer:
         NORTH = 0x1
         WEST = 0x8
 
+        RESET = "\033[0m"
+        YELLOW_BG = "\033[43m"
+        MAIN = "\033[94m" if self.color == "blue" else ""
+
         grid = self.maze.grid
         height = len(grid)
         width = len(grid[0]) if height > 0 else 0
+        fixed = self.maze.fixed
 
         output = []
 
         for y in range(height):
             # Top wall row
-            top = ""
+            top = MAIN
             for x in range(width):
                 cell = grid[y][x]
                 top += "+" + ("---" if (cell & NORTH) else "   ")
-            output.append(top + "+")
+            output.append(top + "+" + (RESET if MAIN else ""))
 
             # Cell row with left walls
             mid = ""
             for x in range(width):
                 cell = grid[y][x]
-                mid += ("|" if (cell & WEST) else " ") + "   "
-            output.append(mid + "|")
+                wall = MAIN + ("|" if (cell & WEST) else " ") + RESET
+                if (x, y) in fixed:
+                    interior = YELLOW_BG + "   " + RESET
+                else:
+                    interior = MAIN + "   " + (RESET if MAIN else "")
+                mid += wall + interior
+            output.append(mid + MAIN + "|" + (RESET if MAIN else ""))
 
         # Bottom border
-        output.append("+" + "---+" * width)
+        output.append(MAIN + "+" + "---+" * width + (RESET if MAIN else ""))
 
         print()
         print('\n'.join(output))

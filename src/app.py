@@ -21,6 +21,8 @@ def wait_input() -> None:
 
 def run(settings: Settings, maze: Maze) -> None:
 
+    color: str = "white"
+
     while (True):
         clear_screen()
         print("""
@@ -30,6 +32,7 @@ def run(settings: Settings, maze: Maze) -> None:
             2. Read new settings
             3. Generate a Maze grid
             4. Visualizer for active maze
+            5. Change colors on visualiser
             0. Exit
             """)
 
@@ -55,8 +58,13 @@ def run(settings: Settings, maze: Maze) -> None:
                 wait_input()
             case "4":
                 clear_screen()
-                visualizer = Visualizer(maze)
+                visualizer = Visualizer(maze, color)
                 visualizer.render_maze()
+                wait_input()
+            case "5":
+                clear_screen()
+                color = "blue" if color == "white" else "white"
+                print(f"Visualizer color changed to: {color}")
                 wait_input()
             case "0":
                 print("Exiting now. Closing program.")
