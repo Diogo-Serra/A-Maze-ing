@@ -1,11 +1,13 @@
 # A-Maze-ing Makefile
-PY := usr/bin/python3
+ENV := .venv/bin
+PY := /usr/bin/python3
 
-PIP := .venv/bin/pip
-MYPY := .venv/bin/mypy
+PIP := $(ENV)/pip
+MYPY := $(ENV)/mypy
+FLAKE8 := $(ENV)/flake8
+ENV_PY := $(ENV)/python3
 CLEAN_ENV := rm -rf .venv
-FLAKE8 := .venv/bin/flake8
-ENV_PY := .venv/bin/python3
+
 SRC := config.txt a-maze-ing.py Makefile README.md requirements.txt src/
 FLAGS_MYPY := --ignore-missing-imports --disallow-untyped-defs \
 			  --warn-return-any --warn-unused-ignores \
@@ -13,7 +15,7 @@ FLAGS_MYPY := --ignore-missing-imports --disallow-untyped-defs \
 
 install:
 	@echo Preparing environment and installing requirements...
-	$(PY) -m venv .venv
+	$(PY) -m venv $(VENV)
 	$(ENV_PY) -m pip install --upgrade pip
 	$(PIP) install -r requirements.txt
 
