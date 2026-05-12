@@ -8,8 +8,7 @@ MYPY := .venv/bin/mypy
 CLEAN_ENV := rm -rf .venv
 FLAKE8 := .venv/bin/flake8
 ENV_PY := .venv/bin/python3
-BUILD := tar -cf A-Maze-ing.tar $(SRC)
-SRC := config.txt main.py Makefile README.md requirements.txt src/
+SRC := config.txt a-maze-ing.py Makefile README.md requirements.txt src/
 FLAGS_MYPY := --ignore-missing-imports --disallow-untyped-defs \
 			  --warn-return-any --warn-unused-ignores \
 		  	  --check-untyped-defs
@@ -26,7 +25,7 @@ run :
 
 build:
 	@echo Building ...
-	tar -cf A-Maze-ing.tar $(BUILD)
+	tar -cf A-Maze-ing.tar.gz $(SRC)
 
 debug:
 	@echo Debugging ...
