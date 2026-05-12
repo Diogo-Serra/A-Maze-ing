@@ -1,7 +1,5 @@
 # A-Maze-ing Makefile
-SHELL :=  $(shell echo $$SHELL)
-
-PY := python3
+PY := usr/bin/python3
 
 PIP := .venv/bin/pip
 MYPY := .venv/bin/mypy
