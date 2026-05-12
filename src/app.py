@@ -22,6 +22,7 @@ def wait_input() -> None:
 def run(settings: Settings, maze: Maze) -> None:
 
     color: str = "white"
+    visualizer = Visualizer(maze, color)
 
     while (True):
         clear_screen()
@@ -50,6 +51,7 @@ def run(settings: Settings, maze: Maze) -> None:
                 else:
                     print("Success reading new config.txt")
                     print("New settings updated!")
+                    visualizer = Visualizer(maze, color)
                 wait_input()
             case "3":
                 clear_screen()
@@ -58,13 +60,14 @@ def run(settings: Settings, maze: Maze) -> None:
                 wait_input()
             case "4":
                 clear_screen()
-                visualizer = Visualizer(maze, color)
                 visualizer.render_maze()
                 wait_input()
             case "5":
                 clear_screen()
                 color = "blue" if color == "white" else "white"
+                visualizer = Visualizer(maze, color)
                 print(f"Visualizer color changed to: {color}")
+                visualizer.render_maze()
                 wait_input()
             case "0":
                 print("Exiting now. Closing program.")
