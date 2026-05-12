@@ -1,5 +1,3 @@
-#!.venv/bin/python3.13
-
 """
 Entry point for the A-Maze-ing project
 
