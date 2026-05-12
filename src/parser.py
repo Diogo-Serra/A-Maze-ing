@@ -33,7 +33,6 @@ def load_settings(source: str) -> tuple[Settings, Maze]:
             if _error['loc']:
                 print(f"Error location: {_error['loc'][0]} (config.txt)")
             print(f"Error message: {_error['msg']}")
-            exit(1)
     except (
         FileNotFoundError,
         FileExistsError,
