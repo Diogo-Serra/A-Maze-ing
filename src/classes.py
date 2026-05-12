@@ -131,12 +131,48 @@ class Maze:
 
         rng = Random(self.SEED)
 
+        FOUR = [
+            [1, 0, 1],
+            [1, 0, 1],
+            [1, 1, 1],
+            [0, 0, 1],
+            [0, 0, 1],
+        ]
+        TWO = [
+            [1, 1, 1],
+            [0, 0, 1],
+            [1, 1, 1],
+            [1, 0, 0],
+            [1, 1, 1],
+        ]
+        PATTERN_W = 7
+        PATTERN_H = 5
+
+        # Fixed cells if the maze is large enough (min 9x7)
+        fixed: set[tuple[int, int]] = set()
+        if self.WIDTH >= PATTERN_W + 2 and self.HEIGHT >= PATTERN_H + 2:
+            start_x = (self.WIDTH - PATTERN_W) // 2
+            start_y = (self.HEIGHT - PATTERN_H) // 2
+            for row in range(PATTERN_H):
+                for col in range(3):
+                    if FOUR[row][col]:
+                        fixed.add((start_x + col, start_y + row))
+                    if TWO[row][col]:
+                        fixed.add((start_x + 4 + col, start_y + row))
+            # Entry/Exit must not overlap with the 42 pattern
+            for label, coord in (("Entry", self.ENTRY), ("Exit", self.EXIT)):
+                if coord in fixed:
+                    print(f"Warning: {label} {coord} overlaps with "
+                          "the '42' pattern. Generating maze without '42'.")
+                    fixed.clear()
+                    break
+
         # 1. Start: Fill grid with 0xF
         self.grid = [
             [0xF] * self.WIDTH for _ in range(self.HEIGHT)]
 
-        # 2. DFS
-        visited: set[tuple[int, int]] = set()
+        # 2. DFS — fixed cells are pre-visited so DFS never carves them
+        visited: set[tuple[int, int]] = set(fixed)
         stack: list[tuple[int, int]] = [self.ENTRY]
         visited.add(self.ENTRY)
 
@@ -159,15 +195,17 @@ class Maze:
             if not carved:
                 stack.pop()
 
-        # 3. If perfect=false, remove extra walls
+        # 3. If perfect=false, remove extra walls (skip fixed cells)
         if not self.PERFECT:
             for _ in range(self.WIDTH * self.HEIGHT // 4):
                 x = rng.randint(0, self.WIDTH - 2)
                 y = rng.randint(0, self.HEIGHT - 2)
                 direction = rng.choice([EAST, SOUTH])
                 dx, dy = DIRECTIONS[direction]
-                self.grid[y][x] &= ~direction
-                self.grid[y+dy][x+dx] &= ~OPPOSITE[direction]
+                nx, ny = x + dx, y + dy
+                if (x, y) not in fixed and (nx, ny) not in fixed:
+                    self.grid[y][x] &= ~direction
+                    self.grid[ny][nx] &= ~OPPOSITE[direction]
 
 
 class Visualizer:
