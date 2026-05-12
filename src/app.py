@@ -7,6 +7,7 @@ Func:
     App: maze creation and user interaction
 """
 from os import system, name
+from sys import argv
 from .parser import load_settings
 from .classes import Settings, Maze, Visualizer
 
@@ -17,6 +18,17 @@ def clear_screen() -> None:
 
 def wait_input() -> None:
     input('Press any key to continue ...')
+
+
+def main() -> None:
+    if len(argv) == 2:
+        print("\nValidating settings and starting Maze generator:")
+        settings, maze = load_settings(argv[1])
+        run(settings, maze)
+    else:
+        print("Invalid argument count\nUsage: "
+              "python3 a-maze-ing.py config.txt")
+    print()
 
 
 def run(settings: Settings, maze: Maze) -> None:

@@ -2,30 +2,10 @@
 Entry point for the A-Maze-ing project
 
 Usage:
-    python3 main.py config.txt
-
-Flow:
-    1. Parse settings from config.txt -> dict
-    2. Validate data with pydantic
-    3. On success, Maze class is instantiated
-    4. Visualizer class instatiated with a maze object
+    python3 a-maze-ing.py config.txt
 """
 
-from sys import argv
-from src import load_settings
-
-
-def main() -> None:
-
-    """ Main function - Maze Caller/Tester """
-    if len(argv) == 2:
-        print("\nValidating settings and starting Maze generator:")
-        settings, maze = load_settings(argv)
-    else:
-        print("Invalid argument count\nUsage: "
-              "python3 main.py config.txt")
-    print()
-
+from src.app import main
 
 if __name__ == "__main__":
     main()

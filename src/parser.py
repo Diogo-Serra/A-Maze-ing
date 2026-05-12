@@ -1,11 +1,10 @@
 """
 Parser Module
 =============
-Parses and validates [argv, config.txt]
-Also handles "config.txt"
+Parses and validates config.txt
 
 Expects:
-    argv: list[str] | file_name: str
+    file_name: str
 
 Returns:
     Settings: validated settings from config.txt
@@ -13,7 +12,6 @@ Returns:
 
 from typing import Any
 from .classes import Settings, Maze
-from string import punctuation, digits
 try:
     from pydantic import ValidationError
 except ImportError as error:
@@ -21,28 +19,14 @@ except ImportError as error:
     exit(1)
 
 
-def load_settings(source: list[str] | str) -> tuple[Settings, Maze]:
+def load_settings(source: str) -> tuple[Settings, Maze]:
     """ Parsing and settings loader handler """
 
     try:
 
-        if isinstance(source, list):
-            from .app import run
-            validated_argv: dict[str, str] = argv_parser(source)
-            settings_file: str = validated_argv['config']
-            settings: Settings = settings_parser(settings_file)
-            maze = Maze(settings)
-            maze.generate()
-            maze.save_maze()
-            maze.show_maze()
-            run(settings, maze)
-            return (settings, maze)
-        elif isinstance(source, str):
-            settings = settings_parser(source)
-            maze = Maze(settings)
-            return (settings, maze)
-        else:
-            raise ValueError(f"Invalid source type: {type(source)}")
+        settings = settings_parser(source)
+        maze = Maze(settings)
+        return (settings, maze)
 
     except ValidationError as error:
         for _error in error.errors():
@@ -64,24 +48,6 @@ def load_settings(source: list[str] | str) -> tuple[Settings, Maze]:
         print(f"Unexpected Error: {exceptional_error}")
         exit(1)
     return (settings, maze)
-
-
-def argv_parser(argv: list[str]) -> dict[str, str]:
-    """ Argv parser returns dictionary with script and config file """
-    usage: list[str] = ["a-maze-ing.py", "config.txt"]
-
-    if len(argv) == 2:
-        script: str = argv[0].strip(punctuation + digits + " ")
-        config: str = argv[1].strip(punctuation + digits + " ")
-        if not all(arg in usage for arg in [script, config]):
-            raise ValueError("Incorrect input\n"
-                             f"Invalid arguments: '{script}' '{config}'\n"
-                             "Usage: python3 a-maze-ing.py config.txt")
-        return {'script': script, 'config': config}
-    else:
-        raise ValueError("Incorrect input\n"
-                         f"Expected 2 arguments, got {len(argv)}\n"
-                         "Usage: python3 a-maze-ing.py config.txt")
 
 
 def settings_parser(file_name: str) -> Settings:

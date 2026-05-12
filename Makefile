@@ -25,7 +25,7 @@ run :
 
 build:
 	@echo Building ...
-	tar -cf A-Maze-ing.tar.gz $(SRC)
+	$(PY) -m build --sdist --outdir .
 
 debug:
 	@echo Debugging ...
