@@ -32,12 +32,12 @@ debug:
 	$(ENV_PY) -m pdb a-maze-ing.py config.txt
 
 lint:
-	@echo Testing lint
+	@echo Testing lint ...
 	$(FLAKE8) . --exclude=.venv
 	$(MYPY) . $(FLAGS_MYPY)
 
 lint-strict:
-	@echo Testing lint-strict
+	@echo Testing lint-strict ...
 	$(FLAKE8) . --exclude=.venv
 	$(MYPY) . --strict
 
