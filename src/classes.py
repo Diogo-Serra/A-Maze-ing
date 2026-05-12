@@ -11,7 +11,7 @@ Classes:
 """
 from __future__ import annotations
 from sys import exit
-import random
+from random import Random
 
 try:
     from pydantic import (
@@ -129,7 +129,7 @@ class Maze:
             EAST:  WEST,
             WEST:  EAST}
 
-        rng = random.Random(self.SEED)
+        rng = Random(self.SEED)
 
         # 1. Start: Fill grid with 0xF
         self.grid = [
