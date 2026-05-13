@@ -108,9 +108,14 @@ class Maze:
     def save_maze(self) -> None:
         if self.grid is None:
             raise ValueError("Generate a maze first")
-        with open(self.settings.OUTPUT_FILE, 'w') as f:
+        with open("Output_" + self.settings.OUTPUT_FILE, 'w') as f:
             for row in self.grid:
                 f.write(''.join(format(cell, 'X') for cell in row) + '\n')
+            f.write('\n')
+            f.write(f'{self.ENTRY}\n')
+            f.write(f'{self.EXIT}\n')
+            f.write("Pathfinder\n")
+
 
     def generate(self) -> None:
         NORTH = 0x1
