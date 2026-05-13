@@ -7,7 +7,6 @@ Classes:
     Settings: validates and stores maze configuration
     Maze: maze generation and pathfinding logic
     Visualizer: class to handle visualizer building
-
 """
 from __future__ import annotations
 from sys import exit
@@ -72,13 +71,14 @@ class Settings(BaseModel):
         return self
 
     def show_settings(self) -> None:
-        print("\n=== Settings === \n"
-              f"\nWidth: {self.WIDTH}\n"
-              f"Height: {self.HEIGHT}\n"
-              f"Entry: {self.ENTRY}\nExit: {self.EXIT}\n"
-              f"\nOutput_file: {self.OUTPUT_FILE}\n"
-              f"Perfect: {self.PERFECT}\n"
-              f"Seed: {self.SEED}\n")
+        print("\n    ===== Settings ===== \n"
+              f"\n    Width: {self.WIDTH}\n"
+              f"    Height: {self.HEIGHT}\n"
+              f"    Entry: {self.ENTRY}\n    Exit: {self.EXIT}\n"
+              f"\n    Output_file: {self.OUTPUT_FILE}\n"
+              f"    Perfect: {self.PERFECT}\n"
+              f"    Seed: {self.SEED}\n"
+              f"    {20 * '-'}")
 
 
 class Maze:
@@ -207,6 +207,8 @@ class Maze:
                 if (x, y) not in self.fixed and (nx, ny) not in self.fixed:
                     self.grid[y][x] &= ~direction
                     self.grid[ny][nx] &= ~OPPOSITE[direction]
+
+        self.save_maze()
 
 
 class Visualizer:

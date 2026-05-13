@@ -43,7 +43,8 @@ def load_settings(source: str, flag: str) -> Settings:
             run(settings, maze)
         elif flag == "run":
             settings: Settings = settings_parser(source)
-            
+            return (settings)
+
 
     except ValidationError as error:
         for _error in error.errors():
@@ -63,8 +64,6 @@ def load_settings(source: str, flag: str) -> Settings:
     except (Exception, BaseException) as exceptional_error:
         print(f"\nUnexpected Error: {exceptional_error}")
         exit(1)
-
-    return (settings)
 
 
 def settings_parser(file_name: str) -> Settings:
