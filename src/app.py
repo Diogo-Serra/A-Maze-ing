@@ -7,7 +7,6 @@ Func:
     App: maze creation and user interaction
 """
 from os import system, name
-from sys import argv
 from .parser import load_settings
 from .classes import Settings, Maze, Visualizer
 
@@ -18,17 +17,6 @@ def clear_screen() -> None:
 
 def wait_input() -> None:
     input('Press any key to continue ...')
-
-
-def main() -> None:
-    if len(argv) == 2:
-        print("\nValidating settings and starting Maze generator:")
-        settings, maze = load_settings(argv[1])
-        run(settings, maze)
-    else:
-        print("Invalid argument count\nUsage: "
-              "python3 a-maze-ing.py config.txt")
-    print()
 
 
 def run(settings: Settings, maze: Maze) -> None:
@@ -57,14 +45,20 @@ def run(settings: Settings, maze: Maze) -> None:
             case "2":
                 clear_screen()
                 old_settings: Settings = settings
-                settings, maze = load_settings("config.txt")
-                if old_settings == settings:
-                    print("No changes from previous read")
-                else:
+                result = load_settings("config.txt")
+                if result is None:
+                    print("Failed to load settings")
+                    wait_input()
+                settings, maze = result
+                if old_settings != settings:
                     print("Success reading new config.txt")
                     print("New settings updated!")
                     visualizer = Visualizer(maze, color)
-                wait_input()
+                    visualizer.render_maze()
+                    wait_input()
+                else:
+                    print("No changes from previous read")
+                    wait_input()
             case "3":
                 clear_screen()
                 maze.generate()
@@ -72,13 +66,17 @@ def run(settings: Settings, maze: Maze) -> None:
                 wait_input()
             case "4":
                 clear_screen()
+                if maze.grid is None:
+                    maze.generate()
                 visualizer.render_maze()
                 wait_input()
             case "5":
                 clear_screen()
                 color = "blue" if color == "white" else "white"
+                if maze.grid is None:
+                    maze.generate()
                 visualizer = Visualizer(maze, color)
-                print(f"Visualizer color changed to: {color}")
+                print(f"Visualiser color changed to: {color}")
                 visualizer.render_maze()
                 wait_input()
             case "0":

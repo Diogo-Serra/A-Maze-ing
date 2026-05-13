@@ -9,7 +9,7 @@ Expects:
 Returns:
     Settings: validated settings from config.txt
 """
-
+from sys import argv
 from typing import Any
 from .classes import Settings, Maze
 try:
@@ -19,14 +19,26 @@ except ImportError as error:
     exit(1)
 
 
-def load_settings(source: str) -> tuple[Settings, Maze]:
+def main() -> None:
+
+    if len(argv) == 2:
+        print("\nValidating settings and starting Maze generator:")
+        load_settings(argv[1])
+    else:
+        print("Invalid argument count\nUsage: "
+              "python3 a-maze-ing.py config.txt")
+    print()
+
+
+def load_settings(source: str):
     """ Parsing and settings loader handler """
+    from .app import run
 
     try:
 
-        settings = settings_parser(source)
-        maze = Maze(settings)
-        return (settings, maze)
+        settings: Settings = settings_parser(source)
+        maze: Maze = Maze(settings)
+        run(settings, maze)
 
     except ValidationError as error:
         for _error in error.errors():
@@ -46,7 +58,6 @@ def load_settings(source: str) -> tuple[Settings, Maze]:
     except (Exception, BaseException) as exceptional_error:
         print(f"Unexpected Error: {exceptional_error}")
         exit(1)
-    return (settings, maze)
 
 
 def settings_parser(file_name: str) -> Settings:

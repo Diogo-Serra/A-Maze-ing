@@ -20,7 +20,6 @@ install:
 	$(PIP) install -r requirements.txt
 
 run :
-	@echo Starting ...
 	$(ENV_PY) a-maze-ing.py config.txt
 
 build:
