@@ -23,7 +23,9 @@ def main() -> None:
 
     if len(argv) == 2:
         print("\nValidating settings and starting Maze generator:")
-        settings = load_settings(argv[1], "init")
+        settings: Settings | None = load_settings(argv[1], "init")
+        if settings is None:
+            print("Error settings")
     else:
         print("Invalid argument count\nUsage: "
               "python3 a-maze-ing.py config.txt")
@@ -42,9 +44,8 @@ def load_settings(source: str, flag: str) -> Settings:
             maze.generate()
             run(settings, maze)
         elif flag == "run":
-            settings: Settings = settings_parser(source)
-            return (settings)
-
+            settings = settings_parser(source)
+        return (settings)
 
     except ValidationError as error:
         for _error in error.errors():
@@ -64,6 +65,7 @@ def load_settings(source: str, flag: str) -> Settings:
     except (Exception, BaseException) as exceptional_error:
         print(f"\nUnexpected Error: {exceptional_error}")
         exit(1)
+    return settings
 
 
 def settings_parser(file_name: str) -> Settings:

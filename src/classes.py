@@ -116,7 +116,6 @@ class Maze:
             f.write(f'{self.EXIT}\n')
             f.write("Pathfinder\n")
 
-
     def generate(self) -> None:
         NORTH = 0x1
         EAST = 0x2
