@@ -45,14 +45,12 @@ def run(settings: Settings, maze: Maze) -> None:
             case "2":
                 clear_screen()
                 old_settings: Settings = settings
-                result = load_settings("config.txt")
-                if result is None:
-                    print("Failed to load settings")
-                    wait_input()
-                settings, maze = result
-                if old_settings != settings:
+                new_settings = load_settings("config.txt", "run")
+                if old_settings != new_settings:
                     print("Success reading new config.txt")
                     print("New settings updated!")
+                    maze = Maze(new_settings)
+                    maze.generate()
                     visualizer = Visualizer(maze, color)
                     visualizer.render_maze()
                     wait_input()

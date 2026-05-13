@@ -23,22 +23,27 @@ def main() -> None:
 
     if len(argv) == 2:
         print("\nValidating settings and starting Maze generator:")
-        load_settings(argv[1])
+        settings = load_settings(argv[1], "init")
     else:
         print("Invalid argument count\nUsage: "
               "python3 a-maze-ing.py config.txt")
     print()
 
 
-def load_settings(source: str):
+def load_settings(source: str, flag: str) -> Settings:
     """ Parsing and settings loader handler """
     from .app import run
 
     try:
 
-        settings: Settings = settings_parser(source)
-        maze: Maze = Maze(settings)
-        run(settings, maze)
+        if flag == "init":
+            settings: Settings = settings_parser(source)
+            maze: Maze = Maze(settings)
+            maze.generate()
+            run(settings, maze)
+        elif flag == "run":
+            settings: Settings = settings_parser(source)
+            
 
     except ValidationError as error:
         for _error in error.errors():
@@ -50,14 +55,16 @@ def load_settings(source: str):
         FileExistsError,
         PermissionError,
     ) as file_error:
-        print(f"File error: {file_error}")
+        print(f"\nFile error: {file_error}")
         exit(1)
     except ValueError as value_error:
-        print(f"Error message: {value_error}")
+        print(f"\nError message: {value_error}")
         exit(1)
     except (Exception, BaseException) as exceptional_error:
-        print(f"Unexpected Error: {exceptional_error}")
+        print(f"\nUnexpected Error: {exceptional_error}")
         exit(1)
+
+    return (settings)
 
 
 def settings_parser(file_name: str) -> Settings:
