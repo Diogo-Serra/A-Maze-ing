@@ -7,8 +7,9 @@ Func:
     App: maze creation and user interaction
 """
 from os import system, name
+from .classes import Settings
 from .parser import load_settings
-from .classes import Settings, MazeGenerator
+from .mazegen import MazeGenerator
 
 
 def clear_screen() -> None:

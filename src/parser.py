@@ -10,7 +10,8 @@ Returns:
     Settings: validated settings from config.txt
 """
 from typing import Any
-from .classes import Settings, MazeGenerator
+from .classes import Settings
+from .mazegen import MazeGenerator
 try:
     from pydantic import ValidationError
 except ImportError as error:
