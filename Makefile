@@ -43,6 +43,7 @@ lint-strict:
 clean:
 	@echo Cleaning all cache and venv
 	$(CLEAN_ENV) $$(find . -name __pycache__ -o -name .mypy_cache)
+	rm -rf mazegen.egg-info
 
 create:
 	@echo Creating virtual environment ...
