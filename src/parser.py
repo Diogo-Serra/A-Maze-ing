@@ -10,7 +10,7 @@ Returns:
     Settings: validated settings from config.txt
 """
 from typing import Any
-from .classes import Settings
+from .settings import Settings
 from .mazegen import MazeGenerator
 try:
     from pydantic import ValidationError

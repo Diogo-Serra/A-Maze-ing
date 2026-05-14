@@ -7,7 +7,7 @@ Func:
     App: maze creation and user interaction
 """
 from os import system, name
-from .classes import Settings
+from .settings import Settings
 from .parser import load_settings
 from .mazegen import MazeGenerator
 
