@@ -15,18 +15,17 @@ def clear_screen() -> None:
     system('cls' if name == 'nt' else 'clear')
 
 
-MENU = """
-    === A-Maze-ing ===
-
-    1. Show settings
-    2. Read new settings
-    3. Generate a Maze grid
-    4. Change colors on visualizer
-    0. Exit
-"""
-
-
 def run(settings: Settings, maze: MazeGenerator) -> None:
+
+    MENU = """
+        === A-Maze-ing ===
+
+        1. Show settings
+        2. Read new settings
+        3. Generate a Maze grid
+        4. Change colors on visualizer
+        0. Exit
+    """
 
     clear_screen()
     color: str = "white"

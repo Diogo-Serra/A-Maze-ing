@@ -5,8 +5,7 @@ Contains the core data models.
 
 Classes:
     Settings: validates and stores maze configuration
-    MazeGenerator: maze generation and pathfinding logic
-    Visualizer: class to handle visualizer building
+    MazeGenerator: maze generation and renderer and pathfinding logic
 """
 from __future__ import annotations
 from sys import exit
