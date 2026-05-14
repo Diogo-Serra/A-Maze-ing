@@ -9,27 +9,13 @@ Expects:
 Returns:
     Settings: validated settings from config.txt
 """
-from sys import argv
 from typing import Any
-from .classes import Settings, Maze
+from .classes import Settings, MazeGenerator
 try:
     from pydantic import ValidationError
 except ImportError as error:
     print(error)
     exit(1)
-
-
-def main() -> None:
-
-    if len(argv) == 2:
-        print("\nValidating settings and starting Maze generator:")
-        settings: Settings | None = load_settings(argv[1], "init")
-        if settings is None:
-            print("Error settings")
-    else:
-        print("Invalid argument count\nUsage: "
-              "python3 a-maze-ing.py config.txt")
-    print()
 
 
 def load_settings(source: str, flag: str) -> Settings:
@@ -40,7 +26,7 @@ def load_settings(source: str, flag: str) -> Settings:
 
         if flag == "init":
             settings: Settings = settings_parser(source)
-            maze: Maze = Maze(settings)
+            maze: MazeGenerator = MazeGenerator(settings)
             maze.generate()
             run(settings, maze)
         elif flag == "run":
@@ -65,7 +51,6 @@ def load_settings(source: str, flag: str) -> Settings:
     except (Exception, BaseException) as exceptional_error:
         print(f"\nUnexpected Error: {exceptional_error}")
         exit(1)
-    return settings
 
 
 def settings_parser(file_name: str) -> Settings:

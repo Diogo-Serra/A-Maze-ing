@@ -8,7 +8,7 @@ Func:
 """
 from os import system, name
 from .parser import load_settings
-from .classes import Settings, Maze, Visualizer
+from .classes import Settings, MazeGenerator, Visualizer
 
 
 def clear_screen() -> None:
@@ -26,7 +26,7 @@ MENU = """
 """
 
 
-def run(settings: Settings, maze: Maze) -> None:
+def run(settings: Settings, maze: MazeGenerator) -> None:
 
     color: str = "white"
     visualizer = Visualizer(maze, color)
@@ -49,7 +49,7 @@ def run(settings: Settings, maze: Maze) -> None:
                 if old_settings != new_settings:
                     print("Success reading new config.txt")
                     print("New settings updated!")
-                    maze = Maze(new_settings)
+                    maze = MazeGenerator(new_settings)
                     maze.generate()
                     visualizer = Visualizer(maze, color)
                     visualizer.render_maze()

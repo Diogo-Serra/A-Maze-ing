@@ -5,7 +5,7 @@ Contains the core data models.
 
 Classes:
     Settings: validates and stores maze configuration
-    Maze: maze generation and pathfinding logic
+    MazeGenerator: maze generation and pathfinding logic
     Visualizer: class to handle visualizer building
 """
 from __future__ import annotations
@@ -81,7 +81,7 @@ class Settings(BaseModel):
               f"    {20 * '-'}")
 
 
-class Maze:
+class MazeGenerator:
     def __init__(self, settings: Settings) -> None:
         self.settings: Settings = settings
         self.WIDTH: int = settings.WIDTH
@@ -216,7 +216,7 @@ class Maze:
 
 
 class Visualizer:
-    def __init__(self, maze: Maze, color: str = "white"):
+    def __init__(self, maze: MazeGenerator, color: str = "white"):
         self.maze = maze
         self.color = color
 
