@@ -7,16 +7,18 @@ Func:
     App: maze creation and user interaction
 """
 from os import system, name
-from .settings import Settings
 from .parser import load_settings
-from .mazegen import MazeGenerator
+from .mazegen import MazeGenerator, Settings
 
 
 def clear_screen() -> None:
+    """Clears the terminal screen. Usage: clear_screen()"""
     system('cls' if name == 'nt' else 'clear')
 
 
 def run(settings: Settings, maze: MazeGenerator) -> None:
+    """Runs the interactive menu loop for the maze application.
+       Usage: run(settings, maze)"""
 
     MENU = """
         === A-Maze-ing ===
@@ -45,7 +47,7 @@ def run(settings: Settings, maze: MazeGenerator) -> None:
                 settings.show_settings()
             case "2":
                 old_settings: Settings = settings
-                new_settings = load_settings("config.txt", "run")
+                new_settings = load_settings(None, "config.txt", "run")
                 if new_settings is None:
                     print("Settings unchanged due to config errors")
                 elif old_settings != new_settings:

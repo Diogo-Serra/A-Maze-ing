@@ -1,17 +1,17 @@
 """
 Parser Module
 =============
-Parses and validates config.txt
+Parses and validates script name and config.txt for settings
 
 Expects:
-    file_name: str
+    script_name: str - argv[0]
+    file_name: str - argv[1]
 
 Returns:
     Settings: validated settings from config.txt
 """
 from typing import Any
-from .settings import Settings
-from .mazegen import MazeGenerator
+from .mazegen import MazeGenerator, Settings
 try:
     from pydantic import ValidationError
 except ImportError as error:
@@ -20,15 +20,24 @@ except ImportError as error:
 
 
 def load_settings(script_name: str, config_file: str, flag: str) -> Settings:
-    """ Parsing and settings loader handler """
+    """Central entry point for loading, validating and launching.
+
+    Controls two execution flows via flag:
+        'init' — startup: validates script name, parses config, builds the
+                 maze and launches the interactive app. Exits on any error.
+        'run'  — in-app reload: re-parses config.txt without restarting.
+
+    Handles all error types: Pydantic ValidationError, file errors,
+    value errors and unexpected exceptions.
+    Usage: load_settings(argv[0], argv[1], 'init')"""
     from .app import run
 
     try:
 
-        if script_name.strip() != "a-maze-ing.py":
-            raise ValueError(f"Invalid script name {script_name}."
-                             "\nScript name should be: a-maze-ing.py.")
         if flag == "init":
+            if script_name.strip() != "a-maze-ing.py":
+                raise ValueError(f"Invalid script name {script_name}."
+                                 "\nScript name should be: a-maze-ing.py.")
             settings: Settings = settings_parser(config_file)
             maze: MazeGenerator = MazeGenerator(settings)
             maze.generate()
@@ -53,12 +62,14 @@ def load_settings(script_name: str, config_file: str, flag: str) -> Settings:
         print(f"Error message: {value_error}")
         exit(1)
     except (Exception, BaseException) as exceptional_error:
-        print(f"Unexpected Error: {exceptional_error}")
+        print(f"\nUnexpected Error: {exceptional_error}")
         exit(1)
 
 
 def settings_parser(file_name: str) -> Settings:
-    """ Settings parser """
+    """Reads and parses a config file into a dict
+       and returns a validated Settings object.
+       Usage: settings_parser('config.txt')"""
 
     parsed_settings: dict[str, Any] = {}
 

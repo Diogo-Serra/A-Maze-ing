@@ -10,10 +10,10 @@ dynamic = ["dependencies"]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["src*"]
+include = ["mazegen*"]
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
 
 [project.scripts]
-mazegen = "src.main:main"
+mazegen = "mazegen.main:main"

@@ -1,8 +1,10 @@
+"""Main module - entry point for the A-Maze-ing application."""
 from .parser import load_settings
 from sys import argv
 
 
 def main() -> None:
+    """Parses command-line arguments and starts the maze generator."""
 
     if len(argv) == 2:
         print("\nValidating settings and starting Maze generator:\n")
