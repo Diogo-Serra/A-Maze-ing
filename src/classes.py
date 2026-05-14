@@ -272,10 +272,6 @@ class MazeGenerator:
                 wall = MAIN + ("|" if (cell & WEST) else " ") + RESET
                 if (x, y) in fixed:
                     interior = YELLOW_BG + "   " + RESET
-                elif (x, y) == self.ENTRY:
-                    interior = MAIN + " S " + (RESET if MAIN else "")
-                elif (x, y) == self.EXIT:
-                    interior = MAIN + " E " + (RESET if MAIN else "")
                 else:
                     interior = MAIN + "   " + (RESET if MAIN else "")
                 mid += wall + interior
