@@ -214,14 +214,8 @@ class MazeGenerator:
 
         self.save_maze()
 
-
-class Visualizer:
-    def __init__(self, maze: MazeGenerator, color: str = "white"):
-        self.maze = maze
-        self.color = color
-
-    def render_maze(self) -> None:
-        if self.maze.grid is None:
+    def render_maze(self, color: str) -> None:
+        if self.grid is None:
             return
 
         NORTH = 0x1
@@ -229,12 +223,12 @@ class Visualizer:
 
         RESET = "\033[0m"
         YELLOW_BG = "\033[43m"
-        MAIN = "\033[94m" if self.color == "blue" else ""
+        MAIN = "\033[94m" if color == "blue" else ""
 
-        grid = self.maze.grid
+        grid = self.grid
         height = len(grid)
         width = len(grid[0]) if height > 0 else 0
-        fixed = self.maze.fixed
+        fixed = self.fixed
 
         output = []
 

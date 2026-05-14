@@ -8,7 +8,7 @@ Func:
 """
 from os import system, name
 from .parser import load_settings
-from .classes import Settings, MazeGenerator, Visualizer
+from .classes import Settings, MazeGenerator
 
 
 def clear_screen() -> None:
@@ -28,10 +28,9 @@ MENU = """
 
 def run(settings: Settings, maze: MazeGenerator) -> None:
 
-    color: str = "white"
-    visualizer = Visualizer(maze, color)
-
     clear_screen()
+    color: str = "white"
+
     while (True):
         choice = input(MENU + "\n    Select option: ").strip()
 
@@ -51,20 +50,18 @@ def run(settings: Settings, maze: MazeGenerator) -> None:
                     print("New settings updated!")
                     maze = MazeGenerator(new_settings)
                     maze.generate()
-                    visualizer = Visualizer(maze, color)
-                    visualizer.render_maze()
+                    maze.render_maze(color)
                 else:
                     print("    No changes from previous read")
             case "3":
                 maze.generate()
-                visualizer = Visualizer(maze, color)
-                visualizer.render_maze()
+                maze.render_maze(color)
             case "4":
                 color = "blue" if color == "white" else "white"
                 if maze.grid is None:
                     maze.generate()
-                visualizer = Visualizer(maze, color)
+                maze.render_maze(color)
                 print(f"    Visualizer color changed to: {color}")
-                visualizer.render_maze()
+                maze.render_maze(color)
             case _:
                 print("    Invalid option")
