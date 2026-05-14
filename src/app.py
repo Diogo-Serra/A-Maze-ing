@@ -44,14 +44,17 @@ def run(settings: Settings, maze: MazeGenerator) -> None:
             case "2":
                 old_settings: Settings = settings
                 new_settings = load_settings("config.txt", "run")
-                if old_settings != new_settings:
-                    print("Success reading new config.txt")
-                    print("New settings updated!")
+                if new_settings is None:
+                    print("Settings unchanged due to config errors")
+                elif old_settings != new_settings:
+                    settings = new_settings
                     maze = MazeGenerator(new_settings)
                     maze.generate()
                     maze.render_maze(color)
+                    print("Success reading new config.txt")
+                    print("New settings updated!")
                 else:
-                    print("    No changes from previous read")
+                    print("No changes from previous read")
             case "3":
                 maze.generate()
                 maze.render_maze(color)
@@ -60,7 +63,7 @@ def run(settings: Settings, maze: MazeGenerator) -> None:
                 if maze.grid is None:
                     maze.generate()
                 maze.render_maze(color)
-                print(f"    Visualizer color changed to: {color}")
+                print(f"Visualizer color changed to: {color}")
                 maze.render_maze(color)
             case _:
-                print("    Invalid option")
+                print("Invalid option")

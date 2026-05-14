@@ -67,6 +67,37 @@ class Settings(BaseModel):
             raise ValueError('Coordinates cannot be negative')
         if self.ENTRY == self.EXIT:
             raise ValueError('Entry and Exit cannot be the same cell')
+
+        PATTERN_W = 7
+        PATTERN_H = 5
+        if self.WIDTH >= PATTERN_W + 2 and self.HEIGHT >= PATTERN_H + 2:
+            FOUR = [
+                [1, 0, 1],
+                [1, 0, 1],
+                [1, 1, 1],
+                [0, 0, 1],
+                [0, 0, 1],
+            ]
+            TWO = [
+                [1, 1, 1],
+                [0, 0, 1],
+                [1, 1, 1],
+                [1, 0, 0],
+                [1, 1, 1],
+            ]
+            start_x = (self.WIDTH - PATTERN_W) // 2
+            start_y = (self.HEIGHT - PATTERN_H) // 2
+            fixed: set[tuple[int, int]] = set()
+            for row in range(PATTERN_H):
+                for col in range(3):
+                    if FOUR[row][col]:
+                        fixed.add((start_x + col, start_y + row))
+                    if TWO[row][col]:
+                        fixed.add((start_x + 4 + col, start_y + row))
+            for label, coord in (("Entry", self.ENTRY), ("Exit", self.EXIT)):
+                if coord in fixed:
+                    raise ValueError(
+                        f"{label} {coord} overlaps with the '42' pattern")
         return self
 
     def show_settings(self) -> None:
@@ -163,13 +194,8 @@ class MazeGenerator:
                         self.fixed.add((start_x + col, start_y + row))
                     if TWO[row][col]:
                         self.fixed.add((start_x + 4 + col, start_y + row))
-            # Entry/Exit must not overlap with the 42 pattern
-            for label, coord in (("Entry", self.ENTRY), ("Exit", self.EXIT)):
-                if coord in self.fixed:
-                    print(f"Warning: {label} {coord} overlaps with "
-                          "the '42' pattern. Generating maze without '42'.")
-                    self.fixed.clear()
-                    break
+        else:
+            print("Note: Maze too small for the '42' pattern, omitting it.")
 
         # 1. Start: Fill grid with 0xF
         self.grid = [
@@ -246,6 +272,10 @@ class MazeGenerator:
                 wall = MAIN + ("|" if (cell & WEST) else " ") + RESET
                 if (x, y) in fixed:
                     interior = YELLOW_BG + "   " + RESET
+                elif (x, y) == self.ENTRY:
+                    interior = MAIN + " S " + (RESET if MAIN else "")
+                elif (x, y) == self.EXIT:
+                    interior = MAIN + " E " + (RESET if MAIN else "")
                 else:
                     interior = MAIN + "   " + (RESET if MAIN else "")
                 mid += wall + interior
