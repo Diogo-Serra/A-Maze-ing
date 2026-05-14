@@ -7,6 +7,8 @@ MYPY := $(ENV)/mypy
 FLAKE8 := $(ENV)/flake8
 ENV_PY := $(ENV)/python3
 CLEAN_ENV := rm -rf .venv
+WHEEL_FILE := mazegen-1.0.4-py3-none-any.whl
+
 
 SRC := config.txt a-maze-ing.py Makefile README.md requirements.txt src/
 FLAGS_MYPY := --ignore-missing-imports --disallow-untyped-defs \
@@ -17,14 +19,15 @@ install:
 	@echo Preparing environment and installing requirements...
 	$(PY) -m venv .venv
 	$(ENV_PY) -m pip install --upgrade pip
-	$(PIP) install -r requirements.txt
+	$(PIP) install $(WHEEL_FILE)
 
 run :
 	$(ENV_PY) a-maze-ing.py config.txt
 
 build:
 	@echo Building ...
-	$(PY) -m build --sdist --outdir .
+	$(PY) -m build
+	rm -rf mazegen.egg-info
 
 debug:
 	@echo Debugging ...
@@ -44,6 +47,7 @@ clean:
 	@echo Cleaning all cache and venv
 	$(CLEAN_ENV) $$(find . -name __pycache__ -o -name .mypy_cache)
 	rm -rf mazegen.egg-info
+	rm -rf dist
 
 create:
 	@echo Creating virtual environment ...

@@ -18,7 +18,7 @@ A-Maze-ing is a Python maze generator project for 42 Core curriculum that proced
 - flake8
 - mypy
 
-### Installation
+### Installation & Run with Make
 
 ```bash
 git clone git@github.com:Diogo-Serra/A-Maze-ing.git
@@ -29,13 +29,10 @@ make run
 
 ### Execution
 
-Run with a seed (optional):
-```bash
-python a-maze-ing.py [seed]
-```
-
 Run with a settings file:
 ```bash
+git clone git@github.com:Diogo-Serra/A-Maze-ing.git
+cd A-Maze-ing
 python a-maze-ing.py config.txt
 ```
 
@@ -55,7 +52,7 @@ PERFECT=bool
 SEED=int
 ```
 
-All fields are required.
+All fields are required. Set `SEED` to a fixed integer for reproducible mazes, or leave it empty / omit it for a random maze each run.
 
 ---
 
@@ -72,17 +69,45 @@ This guarantees a fully connected, solvable maze with exactly one path between a
 
 ### Why DFS?
 
-The team decided on DFS because it is simple to implement, produces long winding corridors (visually interesting and challenging), and guarantees a perfect maze (no loops and no isolated regions). Its recursive nature also maps naturally to Python. This algorithm can still be revisited and changed.
-
+The team decided on DFS because it is simple to implement, produces long winding corridors (visually interesting and challenging), and guarantees a perfect maze (no loops and no isolated regions). Its recursive nature also maps naturally to Python.
 ---
 
-## Reusable Components
+## Reusable Module
 
-- **Maze class** (`classes.py`) - General purpose maze class, takes validated data and handles generation and output.
+The maze generator is packaged as a standalone pip-installable module located at the root of the repository (`mazegen-*.whl` / `mazegen-*.tar.gz`).
 
-- **Settings class** (`classes.py`) - Pydantic-based validation model, easily adapted to validate any structured config data beyond mazes.
+### Installation
 
-- **Parser** (`parser.py`) - Handles config file reading, class instantiation and all error catching through a versatile entry point `load_settings()`.
+```bash
+pip install mazegen-1.0.4-py3-none-any.whl
+```
+
+### Quick Start
+
+```python
+from mazegen import MazeGenerator, Settings
+
+settings = Settings(
+    WIDTH=15,
+    HEIGHT=10,
+    ENTRY=(0, 0),
+    EXIT=(14, 9),
+    OUTPUT_FILE="maze.txt",
+    PERFECT=True,
+    SEED=42
+)
+
+gen = MazeGenerator(settings)
+gen.generate()
+```
+
+### Key Classes
+
+- **`Settings`** (`mazegen/mazegen.py`) — Pydantic model that validates and stores the maze configuration. Accepts width, height, entry/exit coordinates, output file, perfect flag and optional seed.
+
+- **`MazeGenerator`** (`mazegen/mazegen.py`) — Core generation class. Call `generate()` to run the DFS algorithm. Access the result via `gen.grid` (a `list[list[int]]` bitmask grid) or read the saved output file.
+
+- **`Parser`** (`mazegen/parser.py`) — Handles config file reading and all error handling through `load_settings()`. Supports two flows: initial startup (`init`) and in-app reload (`run`).
 
 ---
 
@@ -92,8 +117,8 @@ The team decided on DFS because it is simple to implement, produces long winding
 
 | Member | Role |
 |---|---|
-| [Diogo Serra](https://github.com/Diogo-Serra) | Settings parser, pathfinder
-| [Pedro Pinhão](https://github.com/Retr02k) | Core algorithm, graphics
+| [Diogo Serra](https://github.com/Diogo-Serra) | Settings parser & Pydantic validation, program flow & interactive menu, error handling, Makefile, pip package structure, docstrings
+| [Pedro Pinhão](https://github.com/Retr02k) | DFS maze generation algorithm, terminal renderer & ASCII visualizer, seed-based reproducibility, output file format
 
 ### Planning
 
@@ -121,8 +146,9 @@ Week 2:
 ### Tools Used
 
 - **Version Control**: Git, GitHub
-- **Core Development**: Python, pip, venv
+- **Core Development**: Python, pip, venv, build, setuptools, wheel
 - **Validation & Quality**: pydantic, flake8, mypy
+- **Build & Automation**: Make
 - **Environment & Editor**: Linux, VS Code
 - **Shells**: bash, zsh
 
