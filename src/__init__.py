@@ -1,3 +1,3 @@
-from .parser import load_settings
+from .main import main
 
-__all__ = ['load_settings']
+__all__ = ['main']

@@ -32,6 +32,7 @@ def run(settings: Settings, maze: MazeGenerator) -> None:
     color: str = "white"
 
     while (True):
+
         choice = input(MENU + "\n    Select option: ").strip()
 
         if choice == "0":
@@ -55,6 +56,7 @@ def run(settings: Settings, maze: MazeGenerator) -> None:
                     print("Success reading new config.txt")
                     print("New settings updated!")
                 else:
+                    maze.render_maze(color)
                     print("No changes from previous read")
             case "3":
                 maze.generate()
@@ -63,7 +65,6 @@ def run(settings: Settings, maze: MazeGenerator) -> None:
                 color = "blue" if color == "white" else "white"
                 if maze.grid is None:
                     maze.generate()
-                maze.render_maze(color)
                 print(f"Visualizer color changed to: {color}")
                 maze.render_maze(color)
             case _:
