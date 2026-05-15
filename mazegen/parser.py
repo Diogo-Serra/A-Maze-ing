@@ -80,10 +80,12 @@ def settings_parser(file_name: str) -> Settings:
         setting: str = line.strip()
         if not setting or setting.startswith("#"):
             continue
-        if "=" not in setting:
+        if setting.count('=') > 1:
+            raise ValueError(f"{setting}: Too many '=' signs")
+        elif "=" not in setting:
             raise ValueError(f"{setting} missing '=' sign")
         else:
-            key, value = setting.split('=', 1)
+            key, value = setting.split('=')
             parsed_settings[key.upper()] = value.strip()
 
     if not all(key.isidentifier() for key in parsed_settings.keys()):
