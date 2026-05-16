@@ -58,7 +58,7 @@ All fields are required. Set `SEED` to a fixed integer for reproducible mazes, o
 
 ## Maze Generation Algorithm
 
-The maze is generated using a **Depth-First Search (DFS)** algorithm with recursive backtracking:
+The maze is generated using a Depth-First Search (DFS) algorithm with recursive backtracking:
 
 1. Start at a random cell and mark it as visited.
 2. Randomly choose an unvisited neighbouring cell, carve a passage to it, and move there.
@@ -67,7 +67,7 @@ The maze is generated using a **Depth-First Search (DFS)** algorithm with recurs
 
 This guarantees a fully connected, solvable maze with exactly one path between any two cells.
 
-### Why DFS?
+## Why DFS?
 
 The team decided on DFS because it is simple to implement, produces long winding corridors (visually interesting and challenging), and guarantees a perfect maze (no loops and no isolated regions). Its recursive nature also maps naturally to Python.
 ---
