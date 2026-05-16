@@ -59,6 +59,7 @@ and a "Pathfinder" marker that is a placeholder for the future pathfinding:
         print(f.read())
 """
 from __future__ import annotations
+from string import ascii_letters
 from random import Random
 from sys import exit
 try:
@@ -87,7 +88,7 @@ class Settings(BaseModel):
     def parse_tuple(cls, value: str) -> tuple[int, int]:
         """Parses a string like '(x, y)' into a tuple of two ints.
            Called automatically by Pydantic."""
-        clean = value.strip("() ")
+        clean = value.strip(ascii_letters + '() ')
         x, y = clean.split(",")
         return (int(x.strip()), int(y.strip()))
 
@@ -95,7 +96,7 @@ class Settings(BaseModel):
     @classmethod
     def validator_output_file(cls, name: str) -> str:
         """Validates that the output file name is non-empty,
-           starts with a letter, and ends with .txt.
+           starts with a letter, and ends with '.txt'.
            Called automatically by Pydantic."""
         _name = name.removesuffix('.txt')
         if not _name:

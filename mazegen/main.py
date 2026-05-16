@@ -4,7 +4,7 @@ from sys import argv
 
 
 def main() -> None:
-    """Parses command-line arguments and starts the maze generator."""
+    """Package entry point that validates CLI args and delegates setup."""
 
     if len(argv) == 2:
         print("\nValidating settings and starting Maze generator:\n")

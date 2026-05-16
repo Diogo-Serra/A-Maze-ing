@@ -1,10 +1,9 @@
-"""
-App Module
-==========
-Application controller and user interface.
+"""Application controller and user interface.
 
-Func:
-    App: maze creation and user interaction
+This module coordinates the command-line interaction flow.
+
+Functions:
+    run: Handle user interaction and program flow control.
 """
 from os import system, name
 from .parser import load_settings
