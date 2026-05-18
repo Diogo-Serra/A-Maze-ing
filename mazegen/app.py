@@ -46,7 +46,7 @@ def run(settings: Settings, maze: MazeGenerator) -> None:
                 settings.show_settings()
             case "2":
                 old_settings: Settings = settings
-                new_settings = load_settings(None, "config.txt", "run")
+                new_settings = load_settings("", "config.txt", "run")
                 if new_settings is None:
                     print("Settings unchanged due to config errors")
                 elif old_settings != new_settings:

@@ -19,7 +19,11 @@ except ImportError as error:
     exit(1)
 
 
-def load_settings(script_name: str, config_file: str, flag: str) -> Settings:
+def load_settings(
+        script_name: str,
+        config_file: str,
+        flag: str
+        ) -> Settings:
     """Central entry point for loading, validating and launching.
 
     Controls two execution flows via flag:
@@ -44,13 +48,14 @@ def load_settings(script_name: str, config_file: str, flag: str) -> Settings:
             run(settings, maze)
         elif flag == "run":
             settings = settings_parser(config_file)
-        return (settings)
+        return settings
 
     except ValidationError as error:
         for _error in error.errors():
             if _error['loc']:
                 print(f"Error location: {_error['loc'][0]} (config.txt).")
             print(f"Error message: {_error['msg']}.")
+        exit(1)
     except (
         FileNotFoundError,
         FileExistsError,
@@ -62,7 +67,7 @@ def load_settings(script_name: str, config_file: str, flag: str) -> Settings:
         print(f"Error message: {value_error}")
         exit(1)
     except (Exception, BaseException) as exceptional_error:
-        print(f"\nUnexpected Error: {exceptional_error}")
+        print(f"\n\nUnexpected Error: {exceptional_error}")
         exit(1)
 
 
@@ -70,8 +75,9 @@ def settings_parser(file_name: str) -> Settings:
     """Reads and parses a config file into a dict
        and returns a validated Settings object.
        Usage: settings_parser('config.txt')"""
-
+    from string import punctuation
     parsed_settings: dict[str, Any] = {}
+    new_punctuation = punctuation.replace(',', '')
 
     with open(file_name, 'r') as config_file:
         _settings: list[str] = config_file.read().split('\n')
@@ -86,7 +92,7 @@ def settings_parser(file_name: str) -> Settings:
             raise ValueError(f"{setting} missing '=' sign")
         else:
             key, value = setting.split('=')
-            parsed_settings[key.upper()] = value.strip()
+            parsed_settings[key.upper()] = value.strip(new_punctuation)
 
     if not all(key.isidentifier() for key in parsed_settings.keys()):
         raise ValueError("Invalid key format in config file")

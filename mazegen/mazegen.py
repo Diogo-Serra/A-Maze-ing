@@ -128,36 +128,11 @@ class Settings(BaseModel):
         if self.ENTRY == self.EXIT:
             raise ValueError('Entry and Exit cannot be the same cell')
 
-        PATTERN_W = 7
-        PATTERN_H = 5
-        if self.WIDTH >= PATTERN_W + 2 and self.HEIGHT >= PATTERN_H + 2:
-            FOUR = [
-                [1, 0, 1],
-                [1, 0, 1],
-                [1, 1, 1],
-                [0, 0, 1],
-                [0, 0, 1],
-            ]
-            TWO = [
-                [1, 1, 1],
-                [0, 0, 1],
-                [1, 1, 1],
-                [1, 0, 0],
-                [1, 1, 1],
-            ]
-            start_x = (self.WIDTH - PATTERN_W) // 2
-            start_y = (self.HEIGHT - PATTERN_H) // 2
-            fixed: set[tuple[int, int]] = set()
-            for row in range(PATTERN_H):
-                for col in range(3):
-                    if FOUR[row][col]:
-                        fixed.add((start_x + col, start_y + row))
-                    if TWO[row][col]:
-                        fixed.add((start_x + 4 + col, start_y + row))
-            for label, coord in (("Entry", self.ENTRY), ("Exit", self.EXIT)):
-                if coord in fixed:
-                    raise ValueError(
-                        f"{label} {coord} overlaps with the '42' pattern")
+        fixed = MazeGenerator._compute_fixed_cells(self.WIDTH, self.HEIGHT)
+        for label, coord in (("Entry", self.ENTRY), ("Exit", self.EXIT)):
+            if coord in fixed:
+                raise ValueError(
+                    f"{label} {coord} overlaps with the '42' pattern")
         return self
 
     def show_settings(self) -> None:
@@ -195,6 +170,39 @@ class MazeGenerator:
         self.SEED: int | None = settings.SEED
         self.grid: list[list[int]] | None = None
         self.fixed: set[tuple[int, int]] = set()
+
+    @staticmethod
+    def _compute_fixed_cells(
+            width: int, height: int) -> set[tuple[int, int]]:
+        """Returns the set of fixed cells for the '42' pattern,
+           or an empty set if the maze is too small."""
+        pattern_w = 7
+        pattern_h = 5
+        four = [
+            [1, 0, 1],
+            [1, 0, 1],
+            [1, 1, 1],
+            [0, 0, 1],
+            [0, 0, 1],
+        ]
+        two = [
+            [1, 1, 1],
+            [0, 0, 1],
+            [1, 1, 1],
+            [1, 0, 0],
+            [1, 1, 1],
+        ]
+        fixed: set[tuple[int, int]] = set()
+        if width >= pattern_w + 2 and height >= pattern_h + 2:
+            start_x = (width - pattern_w) // 2
+            start_y = (height - pattern_h) // 2
+            for row in range(pattern_h):
+                for col in range(3):
+                    if four[row][col]:
+                        fixed.add((start_x + col, start_y + row))
+                    if two[row][col]:
+                        fixed.add((start_x + 4 + col, start_y + row))
+        return fixed
 
     def show_maze(self) -> None:
         """Prints the grid as hex values to stdout.
@@ -244,35 +252,9 @@ class MazeGenerator:
 
         rng = Random(self.SEED)
 
-        FOUR = [
-            [1, 0, 1],
-            [1, 0, 1],
-            [1, 1, 1],
-            [0, 0, 1],
-            [0, 0, 1],
-        ]
-        TWO = [
-            [1, 1, 1],
-            [0, 0, 1],
-            [1, 1, 1],
-            [1, 0, 0],
-            [1, 1, 1],
-        ]
-        PATTERN_W = 7
-        PATTERN_H = 5
-
         # Fixed cells if the maze is large enough (min 9x7)
-        self.fixed = set()
-        if self.WIDTH >= PATTERN_W + 2 and self.HEIGHT >= PATTERN_H + 2:
-            start_x = (self.WIDTH - PATTERN_W) // 2
-            start_y = (self.HEIGHT - PATTERN_H) // 2
-            for row in range(PATTERN_H):
-                for col in range(3):
-                    if FOUR[row][col]:
-                        self.fixed.add((start_x + col, start_y + row))
-                    if TWO[row][col]:
-                        self.fixed.add((start_x + 4 + col, start_y + row))
-        else:
+        self.fixed = self._compute_fixed_cells(self.WIDTH, self.HEIGHT)
+        if not self.fixed:
             print("Note: Maze too small for the '42' pattern, omitting it.")
 
         # 1. Start: Fill grid with 0xF
@@ -314,12 +296,11 @@ class MazeGenerator:
                 if (x, y) not in self.fixed and (nx, ny) not in self.fixed:
                     self.grid[y][x] &= ~direction
                     self.grid[ny][nx] &= ~OPPOSITE[direction]
-
         self.save_maze()
 
     def render_maze(self, color: str) -> None:
         """Renders the maze to the terminal with optional color.
-           Usage: gen.render_maze('blue') Only white, blue available"""
+           Usage: gen.render_maze('blue') Only white and blue available"""
         if self.grid is None:
             return
 
